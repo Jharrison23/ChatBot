@@ -8,15 +8,10 @@ $("textarea").keypress(function(event) {
     
     if(event.which === 13) {
         event.preventDefault();
-        console.log("enter");
-	    send(this.value);
         newSentMessage(this.value);
+   	    send(this.value);
         this.value = "";
 
-    }
-
-    else{
-        console.log("you pressed " + this.value);
     }
 });
 
@@ -51,7 +46,8 @@ function send(text) {
 		},
 		data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
 		success: function(data) {
-			setResponse(JSON.stringify(data, undefined, 2));
+            console.log(data);
+			setResponse(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
 		},
 		error: function() {
 			setResponse("Internal Server Error");
@@ -60,7 +56,8 @@ function send(text) {
 	setResponse("Loading...");
 }
 
-function setResponse(val) {
-			newRecievedMessage(val);
+
+function setResponse(json) {
+			newRecievedMessage(json);
 		}
 
