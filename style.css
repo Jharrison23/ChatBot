@@ -17,6 +17,7 @@ body {
     padding: 25px;
     margin: 20px auto;
     box-shadow: 0 3px #ccc;
+    border-radius: 10px;
 }
 
 .chatlogs {
@@ -52,6 +53,11 @@ body {
     height: 60px;
     background: #ccc;
     border-radius: 50%;
+    overflow: hidden;
+}
+
+.chat .user-photo img{
+    width: 100%;
 }
 
 .chat .chat-message {
@@ -89,4 +95,30 @@ body {
     padding: 10px;
     font-size: 18px;
     color: #000;
+}
+
+.chat-form textarea:focus {
+    background: #fff;
+}
+
+.chat-form button {
+    background: cyan;
+    padding: 5px 15px;
+    font-size: 30px;
+    color: white;
+    border: none;
+    margin: 0 10px;
+    border-radius: 3px;
+    box-shadow: 0 3px 0 #0eb2c1;
+    cursor: pointer;
+
+    /*Idk what these do*/
+    /*-webkit-transition: background .2 ease;
+    -moz-transition: background .2 ease;
+    -o-transition: background .2 ease;*/
+
+}
+
+.chat-form button:hover{
+    background: #13c8d9;
 }
