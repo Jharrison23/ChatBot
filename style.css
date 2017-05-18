@@ -6,8 +6,9 @@
 }
 
 body {
-    background: cyan;
+    background: darkgray;
 }
+
 
 .chatbox {
     width: 500px;
@@ -74,7 +75,7 @@ body {
 }
 
 .self .chat-message {
-    background: lightgreen;
+    background: rgba(255, 153, 0, .7);
     order: -1;
 }
 
@@ -102,14 +103,14 @@ body {
 }
 
 .chat-form button {
-    background: cyan;
+    background: rgba(255, 153, 0, .7);;
     padding: 5px 15px;
     font-size: 30px;
     color: white;
     border: none;
     margin: 0 10px;
     border-radius: 3px;
-    box-shadow: 0 3px 0 #0eb2c1;
+    box-shadow: 0 3px 0 rgba(255, 153, 0, .7);;
     cursor: pointer;
 
     /*Idk what these do*/
@@ -120,5 +121,5 @@ body {
 }
 
 .chat-form button:hover{
-    background: #13c8d9;
+    background: rgb(255, 153, 0);
 }
