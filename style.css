@@ -54,4 +54,5 @@ body {
 
 .self .chat-message {
     background: lightgreen;
+    order: -1;
 }
