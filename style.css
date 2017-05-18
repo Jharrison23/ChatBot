@@ -43,8 +43,15 @@ body {
     width: 80%;
     padding: 15px;
     margin: 5px 10px 0;
-    background: cyan;
     border-radius: 10px;
     font-size: 18px;
     color: white;
+}
+
+.friend .chat-message {
+    background: lightblue;
+}
+
+.self .chat-message {
+    background: lightgreen;
 }
