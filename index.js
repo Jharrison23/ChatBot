@@ -27,7 +27,7 @@ function newSentMessage(messageText){
 function newRecievedMessage(messageText){
     $chatlogs.append(
         $('<div/>', {'class': 'chat friend'}).append(
-            $('<div/>', {'class': 'user-photo'}), 
+            $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.png" />')), 
             $('<p/>', {'class': 'chat-message', 'text': messageText})));
 
 
@@ -53,11 +53,11 @@ function send(text) {
 			setResponse("Internal Server Error");
 		}
 	});
-	setResponse("Loading...");
+	setResponse("...");
 }
 
 
 function setResponse(json) {
-			newRecievedMessage(json);
+    newRecievedMessage(json);
 		}
 
