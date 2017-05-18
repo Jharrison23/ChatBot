@@ -6,8 +6,9 @@
 }
 
 body {
-    background: cyan;
+    background: darkgray;
 }
+
 
 .chatbox {
     width: 500px;
@@ -74,7 +75,7 @@ body {
 }
 
 .self .chat-message {
-    background: lightgreen;
+    background: rgba(255, 153, 0, .7);
     order: -1;
 }
 
