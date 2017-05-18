@@ -23,7 +23,22 @@ body {
     padding: 10px;
     width: 100%;
     height: 450px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
+
+/*Styling the scrolllbar*/
+.chatlogs::-webkit-scrollbar{
+    width: 10px;
+}
+
+.chatlogs::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background: rgba(0, 0, 0, .1);
+}
+
+
+
 
 .chat {
     display: flex;
@@ -55,4 +70,23 @@ body {
 .self .chat-message {
     background: lightgreen;
     order: -1;
+}
+
+
+.chat-form {
+    margin-top: 20px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.chat-form textarea {
+    background: #fbfbfb;
+    width: 75%;
+    height: 50%;
+    border: 2px solid #eee;
+    border-radius: 3px;
+    resize: none;
+    padding: 10px;
+    font-size: 18px;
+    color: #000;
 }
