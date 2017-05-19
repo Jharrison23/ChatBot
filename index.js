@@ -5,6 +5,8 @@ var baseUrl = "https://api.api.ai/v1/";
 
 var $chatlogs = $('.chatlogs');
 
+$("#loadingGif").hide();
+
 $("textarea").keypress(function(event) {
     
     if(event.which === 13) {
@@ -30,8 +32,8 @@ function newSentMessage(messageText){
 	
 	$('.sendButton').css('visibility', 'hidden');
 	$('textarea').css('visibility', 'hidden');
-	setResponse("...");
-
+	// setResponse("...");
+	showLoading();
 
 	// $('.sendButton').html('Wait');
 	// $('.sendButton').css("background", "gray");
@@ -62,7 +64,7 @@ function newRecievedMessage(messageText){
 	// }, 5000);
 	// $('.input').prop('disabled', false);
 
-
+	hideLoading();
 
 }
 
@@ -91,8 +93,8 @@ function send(text) {
 		// $('.sendButton').prop('disabled', false);
 		}, 3000);
 
-		
-			
+
+
 		},
 		error: function() {
 			setResponse("Internal Server Error");
@@ -104,6 +106,27 @@ function send(text) {
 
 function setResponse(json) {
     newRecievedMessage(json);
+}
+
+function showLoading()
+{
+	$chatlogs.append($('#loadingGif'));
+// 	$chatlogs.append(
+//         $('<div/>', {'class': 'chat friend'}).append(
+//             $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
+//             $('<div/>', {'class': 'user-photo'}).append($('<img src="https://m.popkey.co/9cacd5/Q8Gb6.gif" />'))));
+
+	$("#loadingGif").show();
+ }
+
+function hideLoading()
+{
+	$("#loadingGif").hide();
+
+	//  $('<div/>', {'class': 'chat friend'}).append(
+    //         $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
+    //         $('<div/>', {'class': 'user-photo'}).append($('<img src="https://m.popkey.co/9cacd5/Q8Gb6.gif" />')));
+
 }
 
 
