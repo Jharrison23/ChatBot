@@ -26,7 +26,7 @@ body {
     height: 450px;
     overflow-x: hidden;
     overflow-y: scroll;
-    background:rgba(200, 200, 200, .1);
+    /*background:rgba(200, 200, 200, .1);*/
 }
 
 /*Styling the scrolllbar*/
@@ -66,6 +66,8 @@ body {
 
 .headerBar{
     /*border: 10px solid black;*/
+    font-size: 25px;
+    color: white;
     padding: 25px;
     width: 500px;
     min-width: 390px;
@@ -95,24 +97,32 @@ body {
 }
 
 .chat .chat-message {
-    width: 80%;
     padding: 15px;
     margin: 5px 10px 0;
     /*border-radius: 10px;*/
     font-size: 18px;
-    color: white;
 }
 
+
 .friend .chat-message {
-    background: lightblue;
+    color: black;
+    width: auto;
+    max-width: 70%;
+    background: rgb(229, 229, 234);
     border-radius: 10px;
 }
 
 .self .chat-message {
-
-    margin: 5px 0 5px 100px;
-    background: rgba(255, 153, 0, .7);
+    color: white;
+    max-width: 80%;
+    width: auto;
+    margin: 5px 0 5px auto;
+    /*background: rgba(255, 153, 0, .7);*/
     border-radius: 10px;
+
+    background: rgb(64, 172, 246);
+    overflow-wrap: break-word;
+
     /*order: -1;*/
 }
 
