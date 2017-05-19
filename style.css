@@ -9,16 +9,15 @@ body {
     background: darkgray;
 }
 
-
 .chatbox {
     width: 500px;
     min-width: 390px;
     height: 600px;
     background: white;
     padding: 25px;
-    margin: 20px auto;
+    margin: 0px auto 20px auto;
     box-shadow: 0 3px #ccc;
-    border-radius: 10px;
+    border-radius: 0px 0px 10px 10px;
 }
 
 .chatlogs {
@@ -27,6 +26,7 @@ body {
     height: 450px;
     overflow-x: hidden;
     overflow-y: scroll;
+    /*background:rgba(200, 200, 200, .1);*/
 }
 
 /*Styling the scrolllbar*/
@@ -40,8 +40,6 @@ body {
 }
 
 
-
-
 .chat {
     display: flex;
     flex-flow: row wrap;
@@ -49,7 +47,16 @@ body {
     margin-bottom: 10px;
 }
 
-.chat .user-photo {
+/*Commented out because i used a more general version below*/
+/*.chat .user-photo {
+    width: 60px;
+    height: 60px;
+    background: #ccc;
+    border-radius: 50%;
+    overflow: hidden;
+}*/
+
+.user-photo {
     width: 60px;
     height: 60px;
     background: #ccc;
@@ -57,26 +64,66 @@ body {
     overflow: hidden;
 }
 
+.headerBar{
+    /*border: 10px solid black;*/
+    font-size: 25px;
+    color: white;
+    padding: 25px;
+    width: 500px;
+    min-width: 390px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    margin: 20px auto 0px auto;
+    background: orange;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.headerBar .title {
+    margin: auto 20px;
+}
+
+.headerBar .user-photo {
+    margin: 0px 0px 0px 10px;
+
+}
+
+.headerBar .user-photo img{
+    width: 100%;
+}
+
 .chat .user-photo img{
     width: 100%;
 }
 
 .chat .chat-message {
-    width: 80%;
     padding: 15px;
     margin: 5px 10px 0;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
     font-size: 18px;
-    color: white;
 }
 
+
 .friend .chat-message {
-    background: lightblue;
+    color: black;
+    width: auto;
+    max-width: 70%;
+    background: rgb(229, 229, 234);
+    border-radius: 10px;
 }
 
 .self .chat-message {
-    background: rgba(255, 153, 0, .7);
-    order: -1;
+    color: white;
+    max-width: 80%;
+    width: auto;
+    margin: 5px 0 5px auto;
+    /*background: rgba(255, 153, 0, .7);*/
+    border-radius: 10px;
+
+    background: rgb(64, 172, 246);
+    overflow-wrap: break-word;
+
+    /*order: -1;*/
 }
 
 
@@ -89,11 +136,11 @@ body {
 .chat-form textarea {
     background: #fbfbfb;
     width: 75%;
-    height: 50%;
-    border: 2px solid #eee;
+    height: 65px;
+    border: 2px solid lightblue;
     border-radius: 3px;
     resize: none;
-    padding: 10px;
+    /*padding: 10px;*/
     font-size: 18px;
     color: #000;
 }
@@ -103,6 +150,7 @@ body {
 }
 
 .chat-form button {
+    height: 65px;
     background: rgba(255, 153, 0, .7);;
     padding: 5px 15px;
     font-size: 30px;
@@ -112,14 +160,17 @@ body {
     border-radius: 3px;
     box-shadow: 0 3px 0 rgba(255, 153, 0, .7);;
     cursor: pointer;
-
-    /*Idk what these do*/
-    /*-webkit-transition: background .2 ease;
-    -moz-transition: background .2 ease;
-    -o-transition: background .2 ease;*/
-
 }
 
 .chat-form button:hover{
     background: rgb(255, 153, 0);
 }
+
+.gif img{
+    width: 50px;
+    height: 50px;
+}
+
+/*#loadingGif{
+    visibility: hidden;
+}*/

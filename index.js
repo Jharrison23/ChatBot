@@ -1,44 +1,72 @@
+// Information needed to access the api.ai bot, only thing needed to be changed 
 var accessToken = "5489544adf6d490c8438cb7377f4bd60";
 var baseUrl = "https://api.api.ai/v1/";
 
 
 var $chatlogs = $('.chatlogs');
 
+$("#loadingGif").hide();
+
 $("textarea").keypress(function(event) {
     
     if(event.which === 13) {
         event.preventDefault();
-        console.log("enter");
-	    send(this.value);
         newSentMessage(this.value);
+   	    send(this.value);
         this.value = "";
-
-    }
-
-    else{
-        console.log("you pressed " + this.value);
     }
 });
 
+//$(".sendButton").on("click", newSentMessage($("textarea").value));
+
 function newSentMessage(messageText){
-    $chatlogs.append(
+    // $chatlogs.append(
+    //     $('<div/>', {'class': 'chat self'}).append(
+    //         $('<div/>', {'class': 'user-photo'}), 
+    //         $('<p/>', {'class': 'chat-message', 'text': messageText})));
+
+	$chatlogs.append(
         $('<div/>', {'class': 'chat self'}).append(
-            $('<div/>', {'class': 'user-photo'}), 
             $('<p/>', {'class': 'chat-message', 'text': messageText})));
 
+	
+	$('.sendButton').css('visibility', 'hidden');
+	$('textarea').css('visibility', 'hidden');
+	// setResponse("...");
+	showLoading();
 
+	// $('.sendButton').html('Wait');
+	// $('.sendButton').css("background", "gray");
+	// $('.sendButton').css("box-shadow", "gray");
+
+
+	// setTimeout(function(){
+	// 	console.log("in here");
+	// 	// $('.sendButton').html('Send');
+	// 	$('.sendButton').css('visibility', 'visible');
+	// 	$('textarea').css('visibility', 'visible');
+
+
+	// 	// $('.sendButton').css("background", "orange");
+	// 	// $('.sendButton').css("box-shadow", "orange");
+	// 	// $('.sendButton').prop('disabled', false);
+	// }, 3000);		
 }
 
 function newRecievedMessage(messageText){
     $chatlogs.append(
         $('<div/>', {'class': 'chat friend'}).append(
-            $('<div/>', {'class': 'user-photo'}), 
+            $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
             $('<p/>', {'class': 'chat-message', 'text': messageText})));
 
+	// setTimeout(function(){
+	// 	$('.input').prop('disabled', false);
+	// }, 5000);
+	// $('.input').prop('disabled', false);
+
+	hideLoading();
 
 }
-
-
 
 function send(text) {
 	$.ajax({
@@ -51,16 +79,55 @@ function send(text) {
 		},
 		data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
 		success: function(data) {
-			setResponse(JSON.stringify(data, undefined, 2));
+            console.log(data);
+			
+		setTimeout(function(){
+		
+			$('.sendButton').css('visibility', 'visible');
+			$('textarea').css('visibility', 'visible');
+
+			setResponse(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
+
+		// $('.sendButton').css("background", "orange");
+		// $('.sendButton').css("box-shadow", "orange");
+		// $('.sendButton').prop('disabled', false);
+		}, 3000);
+
+
+
 		},
 		error: function() {
 			setResponse("Internal Server Error");
 		}
 	});
-	setResponse("Loading...");
+	// setResponse("...");
 }
 
-function setResponse(val) {
-			newRecievedMessage(val);
-		}
+
+function setResponse(json) {
+    newRecievedMessage(json);
+}
+
+function showLoading()
+{
+	$chatlogs.append($('#loadingGif'));
+// 	$chatlogs.append(
+//         $('<div/>', {'class': 'chat friend'}).append(
+//             $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
+//             $('<div/>', {'class': 'user-photo'}).append($('<img src="https://m.popkey.co/9cacd5/Q8Gb6.gif" />'))));
+
+	$("#loadingGif").show();
+ }
+
+function hideLoading()
+{
+	$("#loadingGif").hide();
+
+	//  $('<div/>', {'class': 'chat friend'}).append(
+    //         $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
+    //         $('<div/>', {'class': 'user-photo'}).append($('<img src="https://m.popkey.co/9cacd5/Q8Gb6.gif" />')));
+
+}
+
+
 
