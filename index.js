@@ -146,30 +146,22 @@ function checkIfVisible(message)
 {
 
 	var $topOfMessage = message.position().top;
-	console.log(message.text());
+	// console.log(message.text());
 	
-	console.log($topOfMessage);
+	// console.log($topOfMessage);
 	
-
 	var offset = message.offset().top - 600;
 
-	console.log("offset: " + offset);
+	// console.log("offset: " + offset);
 
 	var out = $chatlogs.outerHeight();
 
-	console.log("out" + out);
+	// console.log("out" + out);
 	if($topOfMessage > out)
 	{
-		
-		console.log("Not visible");
+		// console.log("Not visible");
 		$chatlogs.stop().animate({scrollTop: $topOfMessage - out});
-		
-		
-	}
-
-	else
-	{
-		console.log("visible");
+			
 	}
 }
 
