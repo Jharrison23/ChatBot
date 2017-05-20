@@ -165,3 +165,12 @@ body {
 .chat-form button:hover{
     background: rgb(255, 153, 0);
 }
+
+.gif img{
+    border-radius: 20px;
+}
+
+
+
+
+
