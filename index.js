@@ -33,7 +33,12 @@ function newSentMessage(messageText){
 	$('.sendButton').css('visibility', 'hidden');
 	$('textarea').css('visibility', 'hidden');
 	// setResponse("...");
+
 	showLoading();
+
+	// var $newMessage = $(".chatlogs .chat").last();
+	
+	// checkIfVisible($newMessage);
 
 	// $('.sendButton').html('Wait');
 	// $('.sendButton').css("background", "gray");
@@ -153,10 +158,13 @@ function checkIfVisible(message)
 	var out = $chatlogs.outerHeight();
 
 	console.log("out" + out);
-	if($topOfMessage > 560)
+	if($topOfMessage > out)
 	{
+		
 		console.log("Not visible");
 		$chatlogs.stop().animate({scrollTop: $topOfMessage - out});
+		
+		
 	}
 
 	else
