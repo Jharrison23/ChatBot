@@ -167,10 +167,10 @@ body {
 }
 
 .gif img{
-    width: 50px;
-    height: 50px;
+    border-radius: 20px;
 }
 
-/*#loadingGif{
-    visibility: hidden;
-}*/
+
+
+
+
