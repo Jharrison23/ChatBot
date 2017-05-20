@@ -64,6 +64,10 @@ function newRecievedMessage(messageText){
 	// }, 5000);
 	// $('.input').prop('disabled', false);
 
+	var $newMessage = $(".chatlogs .chat").last();
+	
+	checkIfVisible($newMessage);
+	
 	hideLoading();
 
 }
@@ -106,6 +110,9 @@ function send(text) {
 
 function setResponse(json) {
     newRecievedMessage(json);
+
+	
+
 }
 
 function showLoading()
@@ -130,4 +137,31 @@ function hideLoading()
 }
 
 
+function checkIfVisible(message)
+{
+
+	var $topOfMessage = message.position().top;
+	console.log(message.text());
+	
+	console.log($topOfMessage);
+	
+
+	var offset = message.offset().top - 600;
+
+	console.log("offset: " + offset);
+
+	var out = $chatlogs.outerHeight();
+
+	console.log("out" + out);
+	if($topOfMessage > 560)
+	{
+		console.log("Not visible");
+		$chatlogs.stop().animate({scrollTop: $topOfMessage - out});
+	}
+
+	else
+	{
+		console.log("visible");
+	}
+}
 
