@@ -17,13 +17,7 @@ $("textarea").keypress(function(event) {
     }
 });
 
-//$(".sendButton").on("click", newSentMessage($("textarea").value));
-
 function newSentMessage(messageText){
-    // $chatlogs.append(
-    //     $('<div/>', {'class': 'chat self'}).append(
-    //         $('<div/>', {'class': 'user-photo'}), 
-    //         $('<p/>', {'class': 'chat-message', 'text': messageText})));
 
 	$chatlogs.append(
         $('<div/>', {'class': 'chat self'}).append(
@@ -32,31 +26,12 @@ function newSentMessage(messageText){
 	
 	$('.sendButton').css('visibility', 'hidden');
 	$('textarea').css('visibility', 'hidden');
-	// setResponse("...");
 
 	showLoading();
-
 
 	var $sentMessage = $(".chatlogs .chat").last();
 	
 	checkSentVisibility($sentMessage);
-
-	// $('.sendButton').html('Wait');
-	// $('.sendButton').css("background", "gray");
-	// $('.sendButton').css("box-shadow", "gray");
-
-
-	// setTimeout(function(){
-	// 	console.log("in here");
-	// 	// $('.sendButton').html('Send');
-	// 	$('.sendButton').css('visibility', 'visible');
-	// 	$('textarea').css('visibility', 'visible');
-
-
-	// 	// $('.sendButton').css("background", "orange");
-	// 	// $('.sendButton').css("box-shadow", "orange");
-	// 	// $('.sendButton').prop('disabled', false);
-	// }, 3000);		
 }
 
 
@@ -66,17 +41,11 @@ function newRecievedMessage(messageText){
             $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
             $('<p/>', {'class': 'chat-message', 'text': messageText})));
 
-	// setTimeout(function(){
-	// 	$('.input').prop('disabled', false);
-	// }, 5000);
-	// $('.input').prop('disabled', false);
-
 	var $newMessage = $(".chatlogs .chat").last();
 	
 	checkReceivedVisibility($newMessage);
 	
 	hideLoading();
-
 }
 
 function send(text) {
@@ -97,38 +66,20 @@ function send(text) {
 			$('.sendButton').css('visibility', 'visible');
 			$('textarea').css('visibility', 'visible');
 
-			setResponse(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
-
-		// $('.sendButton').css("background", "orange");
-		// $('.sendButton').css("box-shadow", "orange");
-		// $('.sendButton').prop('disabled', false);
+			newRecievedMessage(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
 		}, 3000);
-
-
 
 		},
 		error: function() {
-			setResponse("Internal Server Error");
+			newRecievedMessage("Internal Server Error");
 		}
 	});
-	// setResponse("...");
 }
 
-
-function setResponse(json) {
-    newRecievedMessage(json);
-
-	
-
-}
 
 function showLoading()
 {
 	$chatlogs.append($('#loadingGif'));
-// 	$chatlogs.append(
-//         $('<div/>', {'class': 'chat friend'}).append(
-//             $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
-//             $('<div/>', {'class': 'user-photo'}).append($('<img src="https://m.popkey.co/9cacd5/Q8Gb6.gif" />'))));
 
 	$("#loadingGif").show();
  }
@@ -136,10 +87,6 @@ function showLoading()
 function hideLoading()
 {
 	$("#loadingGif").hide();
-
-	//  $('<div/>', {'class': 'chat friend'}).append(
-    //         $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
-    //         $('<div/>', {'class': 'user-photo'}).append($('<img src="https://m.popkey.co/9cacd5/Q8Gb6.gif" />')));
 
 }
 
