@@ -109,7 +109,7 @@ body {
     width: auto;
     max-width: 70%;
     background: rgb(229, 229, 234);
-    border-radius: 10px;
+    border-radius: 20px 20px 20px 0;
 }
 
 .self .chat-message {
@@ -118,7 +118,7 @@ body {
     width: auto;
     margin: 5px 0 5px auto;
     /*background: rgba(255, 153, 0, .7);*/
-    border-radius: 10px;
+    border-radius: 20px 20px 0px 20px;
 
     background: rgb(64, 172, 246);
     overflow-wrap: break-word;
