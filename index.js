@@ -36,9 +36,10 @@ function newSentMessage(messageText){
 
 	showLoading();
 
-	// var $newMessage = $(".chatlogs .chat").last();
+
+	var $sentMessage = $(".chatlogs .chat").last();
 	
-	// checkIfVisible($newMessage);
+	checkSentVisibility($sentMessage);
 
 	// $('.sendButton').html('Wait');
 	// $('.sendButton').css("background", "gray");
@@ -58,6 +59,7 @@ function newSentMessage(messageText){
 	// }, 3000);		
 }
 
+
 function newRecievedMessage(messageText){
     $chatlogs.append(
         $('<div/>', {'class': 'chat friend'}).append(
@@ -71,7 +73,7 @@ function newRecievedMessage(messageText){
 
 	var $newMessage = $(".chatlogs .chat").last();
 	
-	checkIfVisible($newMessage);
+	checkReceivedVisibility($newMessage);
 	
 	hideLoading();
 
@@ -142,25 +144,59 @@ function hideLoading()
 }
 
 
-function checkIfVisible(message)
+
+function checkSentVisibility(message)
 {
 
+	console.log("sent");
 	var $topOfMessage = message.position().top;
-	// console.log(message.text());
+	console.log(message.text());
 	
-	// console.log($topOfMessage);
+	console.log($topOfMessage);
 	
 	var offset = message.offset().top - 600;
 
-	// console.log("offset: " + offset);
+	console.log("offset: " + offset);
 
 	var out = $chatlogs.outerHeight();
 
-	// console.log("out" + out);
+	console.log("out" + out);
 	if($topOfMessage > out)
 	{
-		// console.log("Not visible");
-		$chatlogs.stop().animate({scrollTop: $topOfMessage - out});
+		console.log("Not visible");
+
+		var scrollAmount = $topOfMessage - out;
+
+		console.log("scroll amount " + scrollAmount);
+
+		$chatlogs.stop().animate({scrollTop: scrollAmount});
+			
+	}
+}
+
+
+function checkReceivedVisibility(message)
+{
+	console.log("got");
+	var $topOfMessage = message.position().top;
+	console.log(message.text());
+	
+	console.log($topOfMessage);
+	
+	var offset = message.offset().top - 600;
+
+	console.log("offset: " + offset);
+
+	var out = $chatlogs.outerHeight();
+
+	console.log("out" + out);
+	if($topOfMessage > out)
+	{
+		console.log("Not visible");
+		var scrollAmount = $topOfMessage - out;
+
+		console.log("scroll amount " + scrollAmount);
+		$chatlogs.stop().animate({scrollTop: scrollAmount});
 			
 	}
 }
