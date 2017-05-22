@@ -47,16 +47,18 @@ function newRecievedMessage(messageText) {
 		var i = 0;
 
 		var length = messages.length;
+		console.log(length);
 		showLoading();
 		(function theLoop (messages, i, length) 
 		{
 			setTimeout(function () 
 			{
+				console.log("Message " +  i + " : " +messages[i]);
 				createNewMessage(messages[i]);
-				if (i++ < length) 
+				if (i++ < length - 1) 
 				{     
 					showLoading();             // If i > 0, keep going
-					theLoop(messages, i);  // Call the loop again
+					theLoop(messages, i, length);  // Call the loop again
 					
 				}
 			
