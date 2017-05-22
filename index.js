@@ -25,35 +25,39 @@ $("textarea").keypress(function(event) {
 });
 
 
-
+// Method called whenver there is a new recieved message
+// This message comes from the AJAX request sent to API.AI
 function newRecievedMessage(messageText) {
 
+	// Variable storing the message with the "" removed
 	var removedQuotes = messageText.replace(/[""]/g,"");
 
+	// If the message contains a \n split it into an array of messages
 	if(removedQuotes.includes("\\n"))
 	{
-		var messages = removedQuotes.split("\\n");
+		// Split the message up into multiple messages based off the amount of \n's
+		var messageArray = removedQuotes.split("\\n");
 
 
 		var i = 0;
 
-		var length = messages.length;
+		var length = messageArray.length;
 		showLoading();
-		(function theLoop (messages, i, length) 
+		(function theLoop (messageArray, i, length) 
 		{
 			setTimeout(function () 
 			{
-				createNewMessage(messages[i]);
+				createNewMessage(messageArray[i]);
 				if (i++ < length - 1) 
 				{     
 					showLoading();             
-					theLoop(messages, i, length);
+					theLoop(messageArray, i, length);
 					
 				}
 			
 			}, 3000);
 		
-		})(messages, i, length);
+		})(messageArray, i, length);
 	}
 
 	else
@@ -137,21 +141,18 @@ function hideLoading()
 }
 
 
-
 function checkVisibility(message)
 {
 	var $topOfMessage = message.position().top;
-	//console.log(message.text());
-	
+	//console.log(message.text());	
 	//console.log($topOfMessage);
-	
-	var offset = message.offset().top - 600;
 
+	var offset = message.offset().top - 600;
 	//console.log("offset: " + offset);
 
 	var out = $chatlogs.outerHeight();
-
 	//console.log("out" + out);
+
 	if($topOfMessage > out)
 	{
 		//console.log("Not visible");
@@ -159,7 +160,7 @@ function checkVisibility(message)
 
 		//console.log("scroll amount " + scrollAmount);
 		$chatlogs.stop().animate({scrollTop: scrollAmount});
-			
+		
 	}
 }
 
