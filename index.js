@@ -38,7 +38,7 @@ function newRecievedMessage(messageText) {
 		// Split the message up into multiple messages based off the amount of \n's
 		var messageArray = removedQuotes.split("\\n");
 
-
+		// Variable 
 		var i = 0;
 
 		var length = messageArray.length;
