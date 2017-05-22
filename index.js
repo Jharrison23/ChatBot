@@ -17,7 +17,7 @@ $("textarea").keypress(function(event) {
     }
 });
 
-function newSentMessage(messageText){
+function newSentMessage(messageText) {
 
 	$chatlogs.append(
         $('<div/>', {'class': 'chat self'}).append(
@@ -63,31 +63,15 @@ function newRecievedMessage(messageText) {
 			}, 3000);
 		
 		})(messages, i, length);
-	
-
-		// delayMessage(messages, i, messages.length);
-
-		// for(var i = 0; i < messages.length; i++){
-			
-		// 	showLoading();
-
-		// 	var currentMessage = messages[i];
-			
-		// 	setTimeout(createNewMessage, 3000, messages[i]);
-			
-		// 	// setTimeout(function(){
-		// 	// 	console.log("wer in here");
-		// 	// 	createNewMessage(currentMessage);
-		// 	// 	console.log("hi " + messages[i]);
-
-		// 	// }, 3000);
-
-		// }
 	}
 
 	else
-	{
-		createNewMessage(removedQuotes);
+	{	
+		showLoading();
+		setTimeout(function() {
+			createNewMessage(removedQuotes);
+
+		}, 3000);
 	}
    
 }
