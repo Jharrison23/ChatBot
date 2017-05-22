@@ -17,7 +17,7 @@ $("textarea").keypress(function(event) {
     }
 });
 
-function newSentMessage(messageText){
+function newSentMessage(messageText) {
 
 	$chatlogs.append(
         $('<div/>', {'class': 'chat self'}).append(
@@ -27,7 +27,7 @@ function newSentMessage(messageText){
 	$('.sendButton').css('visibility', 'hidden');
 	$('textarea').css('visibility', 'hidden');
 
-	showLoading();
+	//showLoading();
 
 	var $sentMessage = $(".chatlogs .chat").last();
 	
@@ -35,16 +35,7 @@ function newSentMessage(messageText){
 }
 
 
-function newRecievedMessage(messageText){
-
-	// var str = messageText.split("\n");
-
-	// var name = str[0];
-	// var name = messageText.toString();
-	// if(name.match(/\n/)){
-	// 	alert("yeah");
-	// }
-
+function newRecievedMessage(messageText) {
 
 	var removedQuotes = messageText.replace(/[""]/g,"");
 
@@ -52,44 +43,100 @@ function newRecievedMessage(messageText){
 	{
 		var messages = removedQuotes.split("\\n");
 
-		for(var i = 0; i < messages.length; i++){
-			createNewMessage(messages[i]);
 
-		}
+		var i = 0;
 
-		// var mess1 = messages[0];
-
+		var length = messages.length;
+		console.log(length);
+		showLoading();
+		(function theLoop (messages, i, length) 
+		{
+			setTimeout(function () 
+			{
+				console.log("Message " +  i + " : " +messages[i]);
+				createNewMessage(messages[i]);
+				if (i++ < length - 1) 
+				{     
+					showLoading();             // If i > 0, keep going
+					theLoop(messages, i, length);  // Call the loop again
+					
+				}
+			
+			}, 3000);
+		
+		})(messages, i, length);
 	}
 
-	//console.log("String = " + str);
-	
-	// for(var i = 0; i < messageText.length; i++)
-	// {
-	// if(messageText)
-	// 	{
-	// 		console.log("bobobob");
-	// 		messageText[i] = 'k';
-	// 	}
-	// 	console.log(messageText[i]);
-	// }
+	else
+	{	
+		showLoading();
+		setTimeout(function() {
+			createNewMessage(removedQuotes);
 
-
+		}, 3000);
+	}
    
 }
 
 
+
+function delayMessage(messages, i, max) {
+	
+	setTimeout(createNewMessage, 3000, messages[i]);
+
+	i++;
+
+	if(i < max)
+	{
+		delayMessage(messages, i, max);
+	}
+	
+}
+
+
+
+
 function createNewMessage(message) {
 
-	$chatlogs.append(
-			$('<div/>', {'class': 'chat friend'}).append(
-				$('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
-				$('<p/>', {'class': 'chat-message', 'text': message})));
+	// showLoading();
 
-		var $newMessage = $(".chatlogs .chat").last();
+
+	hideLoading();
+
+			
+	$('.sendButton').css('visibility', 'visible');
+	$('textarea').css('visibility', 'visible');
+
+	$chatlogs.append(
+		$('<div/>', {'class': 'chat friend'}).append(
+			$('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
+			$('<p/>', {'class': 'chat-message', 'text': message})));
+
+	var $newMessage = $(".chatlogs .chat").last();
+
+	checkReceivedVisibility($newMessage);
+
+	// setTimeout(function(){
+
+	// 	hideLoading();
+
+			
+	// 	$('.sendButton').css('visibility', 'visible');
+	// 	$('textarea').css('visibility', 'visible');
+
+	// 	$chatlogs.append(
+	// 		$('<div/>', {'class': 'chat friend'}).append(
+	// 			$('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
+	// 			$('<p/>', {'class': 'chat-message', 'text': message})));
+
+	// 	var $newMessage = $(".chatlogs .chat").last();
+
+	// 	checkReceivedVisibility($newMessage);
+	// }, 3000);
+
+	
+	
 		
-		checkReceivedVisibility($newMessage);
-		
-		hideLoading();
 }
 
 
@@ -106,13 +153,7 @@ function send(text) {
 		success: function(data) {
             console.log(data);
 			
-		setTimeout(function(){
-		
-			$('.sendButton').css('visibility', 'visible');
-			$('textarea').css('visibility', 'visible');
-
-			newRecievedMessage(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
-		}, 3000);
+		newRecievedMessage(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
 
 		},
 		error: function() {
@@ -140,26 +181,25 @@ function hideLoading()
 function checkSentVisibility(message)
 {
 
-	console.log("sent");
 	var $topOfMessage = message.position().top;
-	console.log(message.text());
+	//console.log(message.text());
 	
-	console.log($topOfMessage);
+	//console.log($topOfMessage);
 	
 	var offset = message.offset().top - 600;
 
-	console.log("offset: " + offset);
+	//console.log("offset: " + offset);
 
 	var out = $chatlogs.outerHeight();
 
-	console.log("out" + out);
+	//console.log("out" + out);
 	if($topOfMessage > out)
 	{
-		console.log("Not visible");
+		//console.log("Not visible");
 
 		var scrollAmount = $topOfMessage - out;
 
-		console.log("scroll amount " + scrollAmount);
+		//console.log("scroll amount " + scrollAmount);
 
 		$chatlogs.stop().animate({scrollTop: scrollAmount});
 			
@@ -169,25 +209,24 @@ function checkSentVisibility(message)
 
 function checkReceivedVisibility(message)
 {
-	console.log("got");
 	var $topOfMessage = message.position().top;
-	console.log(message.text());
+	//console.log(message.text());
 	
-	console.log($topOfMessage);
+	//console.log($topOfMessage);
 	
 	var offset = message.offset().top - 600;
 
-	console.log("offset: " + offset);
+	//console.log("offset: " + offset);
 
 	var out = $chatlogs.outerHeight();
 
-	console.log("out" + out);
+	//console.log("out" + out);
 	if($topOfMessage > out)
 	{
-		console.log("Not visible");
+		//console.log("Not visible");
 		var scrollAmount = $topOfMessage - out;
 
-		console.log("scroll amount " + scrollAmount);
+		//console.log("scroll amount " + scrollAmount);
 		$chatlogs.stop().animate({scrollTop: scrollAmount});
 			
 	}
