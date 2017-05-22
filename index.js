@@ -25,6 +25,7 @@ $("textarea").keypress(function(event) {
 });
 
 
+
 function newRecievedMessage(messageText) {
 
 	var removedQuotes = messageText.replace(/[""]/g,"");
@@ -65,23 +66,6 @@ function newRecievedMessage(messageText) {
 	}
    
 }
-
-
-
-function delayMessage(messages, i, max) {
-	
-	setTimeout(createNewMessage, 3000, messages[i]);
-
-	i++;
-
-	if(i < max)
-	{
-		delayMessage(messages, i, max);
-	}
-	
-}
-
-
 
 
 function createNewMessage(message) {
