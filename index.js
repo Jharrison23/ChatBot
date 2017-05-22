@@ -191,4 +191,3 @@ function checkVisibility(message)
 		
 	}
 }
-

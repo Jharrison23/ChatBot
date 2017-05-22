@@ -47,6 +47,17 @@ body {
     margin-bottom: 10px;
 }
 
+.chat .user-photo img{
+    width: 100%;
+}
+
+.chat .chat-message {
+    padding: 15px;
+    margin: 5px 10px 0;
+    /*border-radius: 10px;*/
+    font-size: 18px;
+}
+
 /*Commented out because i used a more general version below*/
 /*.chat .user-photo {
     width: 60px;
@@ -62,6 +73,28 @@ body {
     background: #ccc;
     border-radius: 50%;
     overflow: hidden;
+}
+
+.friend .chat-message {
+    color: black;
+    width: auto;
+    max-width: 70%;
+    background: rgb(229, 229, 234);
+    border-radius: 20px 20px 20px 0;
+}
+
+.self .chat-message {
+    color: white;
+    max-width: 80%;
+    width: auto;
+    margin: 5px 0 5px auto;
+    /*background: rgba(255, 153, 0, .7);*/
+    border-radius: 20px 20px 0px 20px;
+
+    background: rgb(64, 172, 246);
+    overflow-wrap: break-word;
+
+    /*order: -1;*/
 }
 
 .headerBar{
@@ -91,41 +124,6 @@ body {
 .headerBar .user-photo img{
     width: 100%;
 }
-
-.chat .user-photo img{
-    width: 100%;
-}
-
-.chat .chat-message {
-    padding: 15px;
-    margin: 5px 10px 0;
-    /*border-radius: 10px;*/
-    font-size: 18px;
-}
-
-
-.friend .chat-message {
-    color: black;
-    width: auto;
-    max-width: 70%;
-    background: rgb(229, 229, 234);
-    border-radius: 20px 20px 20px 0;
-}
-
-.self .chat-message {
-    color: white;
-    max-width: 80%;
-    width: auto;
-    margin: 5px 0 5px auto;
-    /*background: rgba(255, 153, 0, .7);*/
-    border-radius: 20px 20px 0px 20px;
-
-    background: rgb(64, 172, 246);
-    overflow-wrap: break-word;
-
-    /*order: -1;*/
-}
-
 
 .chat-form {
     margin-top: 20px;
@@ -169,8 +167,3 @@ body {
 .gif img{
     border-radius: 20px;
 }
-
-
-
-
-
