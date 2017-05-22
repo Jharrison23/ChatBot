@@ -2,7 +2,6 @@
 var accessToken = "5489544adf6d490c8438cb7377f4bd60";
 var baseUrl = "https://api.api.ai/v1/";
 
-
 var $chatlogs = $('.chatlogs');
 
 $("#loadingGif").hide();
@@ -23,15 +22,9 @@ function newSentMessage(messageText) {
         $('<div/>', {'class': 'chat self'}).append(
             $('<p/>', {'class': 'chat-message', 'text': messageText})));
 
-	
-	$('.sendButton').css('visibility', 'hidden');
-	$('textarea').css('visibility', 'hidden');
-
-	//showLoading();
-
 	var $sentMessage = $(".chatlogs .chat").last();
 	
-	checkSentVisibility($sentMessage);
+	checkVisibility($sentMessage);
 }
 
 
@@ -47,18 +40,16 @@ function newRecievedMessage(messageText) {
 		var i = 0;
 
 		var length = messages.length;
-		console.log(length);
 		showLoading();
 		(function theLoop (messages, i, length) 
 		{
 			setTimeout(function () 
 			{
-				console.log("Message " +  i + " : " +messages[i]);
 				createNewMessage(messages[i]);
 				if (i++ < length - 1) 
 				{     
-					showLoading();             // If i > 0, keep going
-					theLoop(messages, i, length);  // Call the loop again
+					showLoading();             
+					theLoop(messages, i, length);
 					
 				}
 			
@@ -114,7 +105,7 @@ function createNewMessage(message) {
 
 	var $newMessage = $(".chatlogs .chat").last();
 
-	checkReceivedVisibility($newMessage);
+	checkVisibility($newMessage);
 
 	// setTimeout(function(){
 
@@ -131,7 +122,7 @@ function createNewMessage(message) {
 
 	// 	var $newMessage = $(".chatlogs .chat").last();
 
-	// 	checkReceivedVisibility($newMessage);
+	// 	checkVisibility($newMessage);
 	// }, 3000);
 
 	
@@ -168,6 +159,9 @@ function showLoading()
 	$chatlogs.append($('#loadingGif'));
 
 	$("#loadingGif").show();
+
+	$('.sendButton').css('visibility', 'hidden');
+	$('textarea').css('visibility', 'hidden');
  }
 
 function hideLoading()
@@ -178,36 +172,8 @@ function hideLoading()
 
 
 
-function checkSentVisibility(message)
-{
 
-	var $topOfMessage = message.position().top;
-	//console.log(message.text());
-	
-	//console.log($topOfMessage);
-	
-	var offset = message.offset().top - 600;
-
-	//console.log("offset: " + offset);
-
-	var out = $chatlogs.outerHeight();
-
-	//console.log("out" + out);
-	if($topOfMessage > out)
-	{
-		//console.log("Not visible");
-
-		var scrollAmount = $topOfMessage - out;
-
-		//console.log("scroll amount " + scrollAmount);
-
-		$chatlogs.stop().animate({scrollTop: scrollAmount});
-			
-	}
-}
-
-
-function checkReceivedVisibility(message)
+function checkVisibility(message)
 {
 	var $topOfMessage = message.position().top;
 	//console.log(message.text());
