@@ -36,10 +36,31 @@ function newSentMessage(messageText){
 
 
 function newRecievedMessage(messageText){
+
+	// var str = messageText.split("\n");
+
+	// var name = str[0];
+	// //str.replace(/[""]/g, '');
+
+
+	var removedQuotes = messageText.replace(/[""]/g,"");
+	//console.log("String = " + str);
+	
+	// for(var i = 0; i < messageText.length; i++)
+	// {
+	// 	if(messageText)
+	// 	{
+	// 		console.log("bobobob");
+	// 		messageText[i] = 'k';
+	// 	}
+	// 	console.log(messageText[i]);
+	// }
+
+
     $chatlogs.append(
         $('<div/>', {'class': 'chat friend'}).append(
             $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
-            $('<p/>', {'class': 'chat-message', 'text': messageText})));
+            $('<p/>', {'class': 'chat-message', 'text': removedQuotes})));
 
 	var $newMessage = $(".chatlogs .chat").last();
 	
