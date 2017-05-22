@@ -38,56 +38,72 @@ function newRecievedMessage(messageText) {
 		// Split the message up into multiple messages based off the amount of \n's
 		var messageArray = removedQuotes.split("\\n");
 
-		// Variable 
+		// loop index 
 		var i = 0;
 
-		var length = messageArray.length;
+		// Variable for the number of messages
+		var numMessages = messageArray.length;
+
+		// Show the typing indicator
 		showLoading();
-		(function theLoop (messageArray, i, length) 
+
+		// Function which calls the method createNewMessage after waiting 3 seconds
+		(function theLoop (messageArray, i, numMessages) 
 		{
+			// After 3 seconds call method createNewMessage
 			setTimeout(function () 
 			{
 				createNewMessage(messageArray[i]);
-				if (i++ < length - 1) 
-				{     
+				
+				// If there are still more messages
+				if (i++ < numMessages - 1) 
+				{   
+					// Show the typing indicator
 					showLoading();             
-					theLoop(messageArray, i, length);
-					
+
+					// Call the method again
+					theLoop(messageArray, i, numMessages);
 				}
-			
 			}, 3000);
 		
-		})(messageArray, i, length);
+		// Pass the parameters back into the method
+		})(messageArray, i, numMessages);
 	}
 
+	// If there is no \n, there arent multiple messages to be sent
 	else
 	{	
+		// Show the typing indicator
 		showLoading();
+
+		// After 3 seconds call the createNewMessage function
 		setTimeout(function() {
 			createNewMessage(removedQuotes);
-
 		}, 3000);
 	}
-   
 }
 
-
+// Method to create a new div showing the text from API.AI
 function createNewMessage(message) {
 
+	// Hide the typing indicator
 	hideLoading();
 
+	// Show the send button and the text area
 	$('.sendButton').css('visibility', 'visible');
 	$('textarea').css('visibility', 'visible');
 
+	// Append a new div to the chatlogs body, with an image and the text from API.AI
 	$chatlogs.append(
 		$('<div/>', {'class': 'chat friend'}).append(
 			$('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
 			$('<p/>', {'class': 'chat-message', 'text': message})));
 
+	// Find the last message in the chatlogs
 	var $newMessage = $(".chatlogs .chat").last();
 
+	// Call the method to see if the message is visible
 	checkVisibility($newMessage);
-
 }
 
 
@@ -124,16 +140,19 @@ function send(text) {
 }
 
 
+// Funtion which shows the typing indicator
+// As well as hides the textarea and send button
 function showLoading()
 {
 	$chatlogs.append($('#loadingGif'));
-
 	$("#loadingGif").show();
 
 	$('.sendButton').css('visibility', 'hidden');
 	$('textarea').css('visibility', 'hidden');
  }
+ 
 
+// Function which hides the typing indicator
 function hideLoading()
 {
 	$("#loadingGif").hide();
@@ -141,6 +160,7 @@ function hideLoading()
 }
 
 
+// Method which checks to see if a message is in visible
 function checkVisibility(message)
 {
 	var $topOfMessage = message.position().top;
@@ -159,6 +179,7 @@ function checkVisibility(message)
 		var scrollAmount = $topOfMessage - out;
 
 		//console.log("scroll amount " + scrollAmount);
+		// Scroll the view down a certain amount
 		$chatlogs.stop().animate({scrollTop: scrollAmount});
 		
 	}
