@@ -107,17 +107,23 @@ function createNewMessage(message) {
 }
 
 
+// Method which takes the users text and sends an AJAX post request to API.AI
+// Creates a new Div with the users text, and recieves a response message from API.AI 
 function send(text) {
 
-
+	// Create a div with the text that the user typed in
 	$chatlogs.append(
         $('<div/>', {'class': 'chat self'}).append(
             $('<p/>', {'class': 'chat-message', 'text': text})));
 
+	// Find the last message in the chatlogs
 	var $sentMessage = $(".chatlogs .chat").last();
 	
+	// Check to see if that message is visible
 	checkVisibility($sentMessage);
 
+	// AJAX post request, sends the users text to API.AI and 
+	// calls the method newReceivedMessage with the response from API.AI
 	$.ajax({
 		type: "POST",
 		url: baseUrl + "query?v=20150910",
@@ -129,7 +135,8 @@ function send(text) {
 		data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
 		success: function(data) {
             console.log(data);
-			
+		
+		// Pass the response into the method 
 		newRecievedMessage(JSON.stringify(data.result.fulfillment.speech, undefined, 2));
 
 		},
@@ -150,7 +157,7 @@ function showLoading()
 	$('.sendButton').css('visibility', 'hidden');
 	$('textarea').css('visibility', 'hidden');
  }
- 
+
 
 // Function which hides the typing indicator
 function hideLoading()
