@@ -40,15 +40,32 @@ function newRecievedMessage(messageText){
 	// var str = messageText.split("\n");
 
 	// var name = str[0];
-	// //str.replace(/[""]/g, '');
+	// var name = messageText.toString();
+	// if(name.match(/\n/)){
+	// 	alert("yeah");
+	// }
 
 
 	var removedQuotes = messageText.replace(/[""]/g,"");
+
+	if(removedQuotes.includes("\\n"))
+	{
+		var messages = removedQuotes.split("\\n");
+
+		for(var i = 0; i < messages.length; i++){
+			createNewMessage(messages[i]);
+
+		}
+
+		// var mess1 = messages[0];
+
+	}
+
 	//console.log("String = " + str);
 	
 	// for(var i = 0; i < messageText.length; i++)
 	// {
-	// 	if(messageText)
+	// if(messageText)
 	// 	{
 	// 		console.log("bobobob");
 	// 		messageText[i] = 'k';
@@ -57,17 +74,24 @@ function newRecievedMessage(messageText){
 	// }
 
 
-    $chatlogs.append(
-        $('<div/>', {'class': 'chat friend'}).append(
-            $('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
-            $('<p/>', {'class': 'chat-message', 'text': removedQuotes})));
-
-	var $newMessage = $(".chatlogs .chat").last();
-	
-	checkReceivedVisibility($newMessage);
-	
-	hideLoading();
+   
 }
+
+
+function createNewMessage(message) {
+
+	$chatlogs.append(
+			$('<div/>', {'class': 'chat friend'}).append(
+				$('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
+				$('<p/>', {'class': 'chat-message', 'text': message})));
+
+		var $newMessage = $(".chatlogs .chat").last();
+		
+		checkReceivedVisibility($newMessage);
+		
+		hideLoading();
+}
+
 
 function send(text) {
 	$.ajax({
