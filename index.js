@@ -2,30 +2,27 @@
 var accessToken = "5489544adf6d490c8438cb7377f4bd60";
 var baseUrl = "https://api.api.ai/v1/";
 
+// Variable for the chatlogs div
 var $chatlogs = $('.chatlogs');
 
-$("#loadingGif").hide();
 
+// Method which executes once the enter key on the keyboard is pressed
+// Primary function sends the text which the user typed
 $("textarea").keypress(function(event) {
     
+	// If the enter key is pressed
     if(event.which === 13) {
+
+		// Ignore the default function of the enter key(Dont go to a new line)
         event.preventDefault();
-        newSentMessage(this.value);
+
+		// Call the method for sending a message, pass in the text from the user
    	    send(this.value);
+
+		// Clear the text area
         this.value = "";
     }
 });
-
-function newSentMessage(messageText) {
-
-	$chatlogs.append(
-        $('<div/>', {'class': 'chat self'}).append(
-            $('<p/>', {'class': 'chat-message', 'text': messageText})));
-
-	var $sentMessage = $(".chatlogs .chat").last();
-	
-	checkVisibility($sentMessage);
-}
 
 
 function newRecievedMessage(messageText) {
@@ -89,12 +86,8 @@ function delayMessage(messages, i, max) {
 
 function createNewMessage(message) {
 
-	// showLoading();
-
-
 	hideLoading();
 
-			
 	$('.sendButton').css('visibility', 'visible');
 	$('textarea').css('visibility', 'visible');
 
@@ -107,31 +100,20 @@ function createNewMessage(message) {
 
 	checkVisibility($newMessage);
 
-	// setTimeout(function(){
-
-	// 	hideLoading();
-
-			
-	// 	$('.sendButton').css('visibility', 'visible');
-	// 	$('textarea').css('visibility', 'visible');
-
-	// 	$chatlogs.append(
-	// 		$('<div/>', {'class': 'chat friend'}).append(
-	// 			$('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
-	// 			$('<p/>', {'class': 'chat-message', 'text': message})));
-
-	// 	var $newMessage = $(".chatlogs .chat").last();
-
-	// 	checkVisibility($newMessage);
-	// }, 3000);
-
-	
-	
-		
 }
 
 
 function send(text) {
+
+
+	$chatlogs.append(
+        $('<div/>', {'class': 'chat self'}).append(
+            $('<p/>', {'class': 'chat-message', 'text': text})));
+
+	var $sentMessage = $(".chatlogs .chat").last();
+	
+	checkVisibility($sentMessage);
+
 	$.ajax({
 		type: "POST",
 		url: baseUrl + "query?v=20150910",
@@ -169,7 +151,6 @@ function hideLoading()
 	$("#loadingGif").hide();
 
 }
-
 
 
 
