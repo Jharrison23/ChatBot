@@ -2,7 +2,6 @@
 var accessToken = "5489544adf6d490c8438cb7377f4bd60";
 var baseUrl = "https://api.api.ai/v1/";
 
-
 var $chatlogs = $('.chatlogs');
 
 $("#loadingGif").hide();
@@ -22,12 +21,6 @@ function newSentMessage(messageText) {
 	$chatlogs.append(
         $('<div/>', {'class': 'chat self'}).append(
             $('<p/>', {'class': 'chat-message', 'text': messageText})));
-
-	
-	$('.sendButton').css('visibility', 'hidden');
-	$('textarea').css('visibility', 'hidden');
-
-	//showLoading();
 
 	var $sentMessage = $(".chatlogs .chat").last();
 	
@@ -168,6 +161,9 @@ function showLoading()
 	$chatlogs.append($('#loadingGif'));
 
 	$("#loadingGif").show();
+
+	$('.sendButton').css('visibility', 'hidden');
+	$('textarea').css('visibility', 'hidden');
  }
 
 function hideLoading()
