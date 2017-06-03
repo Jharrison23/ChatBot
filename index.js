@@ -24,6 +24,10 @@ $("textarea").keypress(function(event) {
     }
 });
 
+$("#rec").click(function(event) {
+				switchRecognition();
+			});
+
 
 // Method called whenver there is a new recieved message
 // This message comes from the AJAX request sent to API.AI
@@ -33,10 +37,10 @@ function newRecievedMessage(messageText) {
 	var removedQuotes = messageText.replace(/[""]/g,"");
 
 	// If the message contains a \n split it into an array of messages
-	if(removedQuotes.includes("\\n"))
+	if(removedQuotes.includes("~n"))
 	{
 		// Split the message up into multiple messages based off the amount of \n's
-		var messageArray = removedQuotes.split("\\n");
+		var messageArray = removedQuotes.split("~n");
 
 		// loop index 
 		var i = 0;
@@ -89,8 +93,17 @@ function createNewMessage(message) {
 	// Hide the typing indicator
 	hideLoading();
 
+	// If the message is blank
+	if(message == "")
+	{
+		message = "Sorry there seems to be a problem";
+	}
+
+	// take the message and say it back to the user.
+	speechResponse(message);
+
 	// Show the send button and the text area
-	$('.sendButton').css('visibility', 'visible');
+	$('#rec').css('visibility', 'visible');
 	$('textarea').css('visibility', 'visible');
 
 	// Append a new div to the chatlogs body, with an image and the text from API.AI
@@ -154,7 +167,7 @@ function showLoading()
 	$chatlogs.append($('#loadingGif'));
 	$("#loadingGif").show();
 
-	$('.sendButton').css('visibility', 'hidden');
+	$('#rec').css('visibility', 'hidden');
 	$('textarea').css('visibility', 'hidden');
  }
 
@@ -171,24 +184,120 @@ function hideLoading()
 function checkVisibility(message)
 {
 	var $topOfMessage = message.position().top;
-	//console.log(message.text());	
-	//console.log($topOfMessage);
 
-	var offset = message.offset().top - 600;
-	//console.log("offset: " + offset);
 
-	var out = $chatlogs.outerHeight();
-	//console.log("out" + out);
 
-	if($topOfMessage > out)
-	{
-		//console.log("Not visible");
-		var scrollAmount = $topOfMessage - out;
+	// Scroll the view down a certain amount
+	$chatlogs.stop().animate({scrollTop: 600});
+	
+	// //console.log(message.text());	
+	
+	// //console.log($topOfMessage);
 
-		//console.log("scroll amount " + scrollAmount);
-		// Scroll the view down a certain amount
-		$chatlogs.stop().animate({scrollTop: scrollAmount});
+	// var offset = message.offset().top - 600;
+	
+	// //console.log("offset: " + offset);
+
+	// var out = $chatlogs.outerHeight();
+	
+	// //console.log("out" + out);
+
+	// if($topOfMessage > out)
+	// {
+	// 	//console.log("Not visible");
+	// 	//var scrollAmount = $topOfMessage - out;
+
+	// 	//console.log("scroll amount " + scrollAmount);
+
+
+	// 	var lastMessage = $(".chatlogs .chat").last();
+
+	// 	// Scroll the view down a certain amount
+	// 	$chatlogs.stop().animate({scrollTop: $topOfMessage});
 		
+	// }
+}
+
+
+var recognition;
+
+function startRecognition() {
+
+    console.log("Start")
+	recognition = new webkitSpeechRecognition();
+
+	recognition.onstart = function(event) {
+
+        console.log("Update");
+		updateRec();
+	};
+	
+	recognition.onresult = function(event) {
+	
+		var text = "";
+	
+		for (var i = event.resultIndex; i < event.results.length; ++i) {
+			text += event.results[i][0].transcript;
+		}
+	
+		setInput(text);
+		stopRecognition();
+	
+	};
+	
+	recognition.onend = function() {
+		stopRecognition();
+	};
+	
+	recognition.lang = "en-US";
+	recognition.start();
+
+}
+
+
+
+function stopRecognition() {
+	if (recognition) {
+        console.log("Stop Recog");
+		recognition.stop();
+		recognition = null;
+	}
+	updateRec();
+}
+
+
+
+function switchRecognition() {
+	if (recognition) {
+        console.log(" Stop if");
+		stopRecognition();
+	} else {
+		startRecognition();
 	}
 }
 
+
+function setInput(text) {
+	$(".input").val(text);
+	
+    send(text);
+	
+    $(".input").val("");
+    
+}
+
+
+function updateRec() {
+	$("#rec").text(recognition ? "Stop" : "Speak");
+}
+
+function speechResponse(message)
+{
+
+	var msg = new SpeechSynthesisUtterance();
+ 	msg.voiceURI = "native";
+  	msg.text = message;
+  	msg.lang = "en-US";
+  	window.speechSynthesis.speak(msg);
+
+}
