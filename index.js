@@ -183,39 +183,8 @@ function hideLoading()
 // Method which checks to see if a message is in visible
 function checkVisibility(message)
 {
-	var $topOfMessage = message.position().top;
-
-
-
 	// Scroll the view down a certain amount
-	$chatlogs.stop().animate({scrollTop: 600});
-	
-	// //console.log(message.text());	
-	
-	// //console.log($topOfMessage);
-
-	// var offset = message.offset().top - 600;
-	
-	// //console.log("offset: " + offset);
-
-	// var out = $chatlogs.outerHeight();
-	
-	// //console.log("out" + out);
-
-	// if($topOfMessage > out)
-	// {
-	// 	//console.log("Not visible");
-	// 	//var scrollAmount = $topOfMessage - out;
-
-	// 	//console.log("scroll amount " + scrollAmount);
-
-
-	// 	var lastMessage = $(".chatlogs .chat").last();
-
-	// 	// Scroll the view down a certain amount
-	// 	$chatlogs.stop().animate({scrollTop: $topOfMessage});
-		
-	// }
+	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
 }
 
 
