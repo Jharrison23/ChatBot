@@ -37,41 +37,54 @@ function newRecievedMessage(messageText) {
 	var removedQuotes = messageText.replace(/[""]/g,"");
 
 	// If the message contains a \n split it into an array of messages
-	if(removedQuotes.includes("~n"))
+	if(removedQuotes.includes("<br "))
 	{
-		// Split the message up into multiple messages based off the amount of \n's
-		var messageArray = removedQuotes.split("~n");
+		messageType(removedQuotes);
 
-		// loop index 
-		var i = 0;
+		// var timeDelay = removedQuotes.match(/\<br = (\d+)\>/);
 
-		// Variable for the number of messages
-		var numMessages = messageArray.length;
+		// console.log(timeDelay);
 
-		// Show the typing indicator
-		showLoading();
+		// // timeDelay = timeDelay[1];
 
-		// Function which calls the method createNewMessage after waiting 3 seconds
-		(function theLoop (messageArray, i, numMessages) 
-		{
-			// After 3 seconds call method createNewMessage
-			setTimeout(function () 
-			{
-				createNewMessage(messageArray[i]);
-				
-				// If there are still more messages
-				if (i++ < numMessages - 1) 
-				{   
-					// Show the typing indicator
-					showLoading();             
+		// // console.log(timeDelay);
 
-					// Call the method again
-					theLoop(messageArray, i, numMessages);
-				}
-			}, 3000);
+		// //console.log(timeDelay[1]);
 		
-		// Pass the parameters back into the method
-		})(messageArray, i, numMessages);
+		// // Split the message up into multiple messages based off the amount of \n's
+		// var messageArray = removedQuotes.split(/\<br = \d+\>/g);
+		// console.log(messageArray);
+
+		// // loop index 
+		// var i = 0;
+
+		// // Variable for the number of messages
+		// var numMessages = messageArray.length;
+
+		// // Show the typing indicator
+		// showLoading();
+
+		// // Function which calls the method createNewMessage after waiting 3 seconds
+		// (function theLoop (messageArray, i, numMessages) 
+		// {
+		// 	// After 3 seconds call method createNewMessage
+		// 	setTimeout(function () 
+		// 	{
+		// 		createNewMessage(messageArray[i]);
+				
+		// 		// If there are still more messages
+		// 		if (i++ < numMessages - 1) 
+		// 		{   
+		// 			// Show the typing indicator
+		// 			showLoading();             
+
+		// 			// Call the method again
+		// 			theLoop(messageArray, i, numMessages);
+		// 		}
+		// 	}, timeDelay);
+		
+		// // Pass the parameters back into the method
+		// })(messageArray, i, numMessages);
 	}
 
 	// If there is no \n, there arent multiple messages to be sent
@@ -93,12 +106,7 @@ function createNewMessage(message) {
 	// Hide the typing indicator
 	hideLoading();
 
-	// If the message is blank
-	if(message == "")
-	{
-		message = "Sorry there seems to be a problem";
-	}
-
+	 
 	// take the message and say it back to the user.
 	speechResponse(message);
 
@@ -183,42 +191,98 @@ function hideLoading()
 // Method which checks to see if a message is in visible
 function checkVisibility(message)
 {
-	var $topOfMessage = message.position().top;
-
-
-
 	// Scroll the view down a certain amount
-	$chatlogs.stop().animate({scrollTop: 600});
+	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
+}
+
+function messageType(message)
+{
+	var matches;
+	var timeDelay = new Array(); 
+
+	var regex = /\<br = (\d+)\>/g;
 	
-	// //console.log(message.text());	
+	// //timeDelay = message.match(/\<br = (\d+)\>/)
+	// timeDelay = regex.exec(message);
+	// console.log(timeDelay);
+
+	// //timeDelay = message.match(/\<br = (\d+)\>/)
+	// timeDelay = regex.exec(message);
+	// console.log(timeDelay);
+
+	// //timeDelay = message.match(/\<br = (\d+)\>/)
+	// timeDelay = regex.exec(message);
+	// console.log(timeDelay);
+
 	
-	// //console.log($topOfMessage);
+	while(matches = regex.exec(message))
+	{
+		timeDelay.push(matches[1]); 
+	}
 
-	// var offset = message.offset().top - 600;
+	console.log(timeDelay);
+
+
+	var messageArray = message.split(/\<br = \d+\>/);
+
+	if(messageArray[0] == "")
+	{
+		messageArray = messageArray.splice(1);
+	}
+
+	// timeDelay = timeDelay[1];
+
+	// console.log(timeDelay);
+
+	//console.log(timeDelay[1]);
 	
-	// //console.log("offset: " + offset);
+	// Split the message up into multiple messages based off the amount of \n's
+	//var messageArray = message.split(/\<br = \d+\>/);
+	console.log(messageArray);
 
-	// var out = $chatlogs.outerHeight();
+	// loop index 
+	var i = 0;
+
+	// Variable for the number of messages
+	var numMessages = messageArray.length;
+
+	// Show the typing indicator
+	showLoading();
+
+	// Function which calls the method createNewMessage after waiting 3 seconds
+	(function theLoop (messageArray, i, numMessages) 
+	{
+		// After 3 seconds call method createNewMessage
+		setTimeout(function () 
+		{
+			createNewMessage(messageArray[i]);
+			
+			// If there are still more messages
+			if (i++ < numMessages - 1) 
+			{   
+				// Show the typing indicator
+				showLoading();             
+
+				// Call the method again
+				theLoop(messageArray, i, numMessages);
+			}
+		}, timeDelay[i]);
 	
-	// //console.log("out" + out);
-
-	// if($topOfMessage > out)
-	// {
-	// 	//console.log("Not visible");
-	// 	//var scrollAmount = $topOfMessage - out;
-
-	// 	//console.log("scroll amount " + scrollAmount);
-
-
-	// 	var lastMessage = $(".chatlogs .chat").last();
-
-	// 	// Scroll the view down a certain amount
-	// 	$chatlogs.stop().animate({scrollTop: $topOfMessage});
-		
-	// }
+	// Pass the parameters back into the method
+	})(messageArray, i, numMessages);
 }
 
 
+
+
+
+
+
+
+
+
+
+//Voice stuff
 var recognition;
 
 function startRecognition() {
