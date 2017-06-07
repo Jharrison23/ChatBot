@@ -1,5 +1,5 @@
 // Information needed to access the api.ai bot, only thing needed to be changed 
-var accessToken = "5489544adf6d490c8438cb7377f4bd60";
+var accessToken = "b56ec2c85b2744ad81aeb6518d30a6ae";
 var baseUrl = "https://api.api.ai/v1/";
 
 // Variable for the chatlogs div
@@ -42,51 +42,6 @@ function newRecievedMessage(messageText) {
 	if(removedQuotes.includes("<br "))
 	{
 		messageType(removedQuotes);
-
-		// var timeDelay = removedQuotes.match(/\<br = (\d+)\>/);
-
-		// console.log(timeDelay);
-
-		// // timeDelay = timeDelay[1];
-
-		// // console.log(timeDelay);
-
-		// //console.log(timeDelay[1]);
-		
-		// // Split the message up into multiple messages based off the amount of \n's
-		// var messageArray = removedQuotes.split(/\<br = \d+\>/g);
-		// console.log(messageArray);
-
-		// // loop index 
-		// var i = 0;
-
-		// // Variable for the number of messages
-		// var numMessages = messageArray.length;
-
-		// // Show the typing indicator
-		// showLoading();
-
-		// // Function which calls the method createNewMessage after waiting 3 seconds
-		// (function theLoop (messageArray, i, numMessages) 
-		// {
-		// 	// After 3 seconds call method createNewMessage
-		// 	setTimeout(function () 
-		// 	{
-		// 		createNewMessage(messageArray[i]);
-				
-		// 		// If there are still more messages
-		// 		if (i++ < numMessages - 1) 
-		// 		{   
-		// 			// Show the typing indicator
-		// 			showLoading();             
-
-		// 			// Call the method again
-		// 			theLoop(messageArray, i, numMessages);
-		// 		}
-		// 	}, timeDelay);
-		
-		// // Pass the parameters back into the method
-		// })(messageArray, i, numMessages);
 	}
 
 	// If there is no \n, there arent multiple messages to be sent
@@ -98,7 +53,7 @@ function newRecievedMessage(messageText) {
 		// After 3 seconds call the createNewMessage function
 		setTimeout(function() {
 			createNewMessage(removedQuotes);
-		}, 3000);
+		}, DEFAULT_TIME_DELAY);
 	}
 }
 
@@ -204,24 +159,11 @@ function messageType(message)
 
 	var regex = /\<br = (\d*)\>/g;
 	
-	// //timeDelay = message.match(/\<br = (\d+)\>/)
-	// timeDelay = regex.exec(message);
-	// console.log(timeDelay);
-
-	// //timeDelay = message.match(/\<br = (\d+)\>/)
-	// timeDelay = regex.exec(message);
-	// console.log(timeDelay);
-
-	// //timeDelay = message.match(/\<br = (\d+)\>/)
-	// timeDelay = regex.exec(message);
-	// console.log(timeDelay);
-
-	
 	while(matches = regex.exec(message))
 	{
 		if(matches[1] != "")
 		{
-			timeDelay.push(matches[1]); 
+			timeDelay.push(matches[1] * 1000); 
 		}
 
 		else
@@ -233,22 +175,16 @@ function messageType(message)
 
 	console.log(timeDelay);
 
+	var nonGlobalRegex = /\<br = \d*\>/;
 
-	var messageArray = message.split(/\<br = \d*\>/);
+	var messageArray = message.split(nonGlobalRegex);
 
 	if(messageArray[0] == "")
 	{
 		messageArray = messageArray.splice(1);
 	}
 
-	// timeDelay = timeDelay[1];
-
-	// console.log(timeDelay);
-
-	//console.log(timeDelay[1]);
 	
-	// Split the message up into multiple messages based off the amount of \n's
-	//var messageArray = message.split(/\<br = \d+\>/);
 	console.log(messageArray);
 
 	// loop index 
@@ -282,11 +218,6 @@ function messageType(message)
 	// Pass the parameters back into the method
 	})(messageArray, i, numMessages);
 }
-
-
-
-
-
 
 
 
@@ -369,10 +300,28 @@ function updateRec() {
 function speechResponse(message)
 {
 
+	// var msg = new SpeechSynthesisUtterance();
+ 	// msg.voiceURI = "native";
+  	// msg.text = message;
+  	// msg.lang = "en-US";
+  	// window.speechSynthesis.speak(msg);
+
+
 	var msg = new SpeechSynthesisUtterance();
- 	msg.voiceURI = "native";
+
+	// These lines list all of the voices which can be used in speechSynthesis
+	//var voices = speechSynthesis.getVoices();
+	//console.log(voices);
+	
+	
+	msg.default = false;
+ 	msg.voiceURI = "Fiona";
+	msg.name = "Fiona";
+	msg.localService = true;
   	msg.text = message;
-  	msg.lang = "en-US";
+  	msg.lang = "en";
+	msg.rate = 1;
+	msg.volume = 1;
   	window.speechSynthesis.speak(msg);
 
 }
