@@ -37,10 +37,19 @@ function newRecievedMessage(messageText) {
 	var removedQuotes = messageText.replace(/[""]/g,"");
 
 	// If the message contains a \n split it into an array of messages
-	if(removedQuotes.includes("~n"))
+	if(removedQuotes.includes("<br "))
 	{
+
+		var timeDelay = removedQuotes.match(/\<br = (\d+)\>/);
+
+		timeDelay = timeDelay[1];
+
+		console.log(timeDelay);
+
+		//console.log(timeDelay[1]);
+		
 		// Split the message up into multiple messages based off the amount of \n's
-		var messageArray = removedQuotes.split("~n");
+		var messageArray = removedQuotes.split(/\<br = \d+\>/);
 
 		// loop index 
 		var i = 0;
@@ -68,7 +77,7 @@ function newRecievedMessage(messageText) {
 					// Call the method again
 					theLoop(messageArray, i, numMessages);
 				}
-			}, 3000);
+			}, timeDelay);
 		
 		// Pass the parameters back into the method
 		})(messageArray, i, numMessages);
