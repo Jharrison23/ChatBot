@@ -5,6 +5,8 @@ var baseUrl = "https://api.api.ai/v1/";
 // Variable for the chatlogs div
 var $chatlogs = $('.chatlogs');
 
+var DEFAULT_TIME_DELAY = 3000;
+
 
 // Method which executes once the enter key on the keyboard is pressed
 // Primary function sends the text which the user typed
@@ -200,7 +202,7 @@ function messageType(message)
 	var matches;
 	var timeDelay = new Array(); 
 
-	var regex = /\<br = (\d+)\>/g;
+	var regex = /\<br = (\d*)\>/g;
 	
 	// //timeDelay = message.match(/\<br = (\d+)\>/)
 	// timeDelay = regex.exec(message);
@@ -217,13 +219,22 @@ function messageType(message)
 	
 	while(matches = regex.exec(message))
 	{
-		timeDelay.push(matches[1]); 
+		if(matches[1] != "")
+		{
+			timeDelay.push(matches[1]); 
+		}
+
+		else
+		{
+			timeDelay.push(DEFAULT_TIME_DELAY);
+		}
+	
 	}
 
 	console.log(timeDelay);
 
 
-	var messageArray = message.split(/\<br = \d+\>/);
+	var messageArray = message.split(/\<br = \d*\>/);
 
 	if(messageArray[0] == "")
 	{
