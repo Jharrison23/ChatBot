@@ -154,7 +154,7 @@ function checkVisibility(message)
 }
 
 // Old message parsing method, 
-// not deleting yet since I dont know if the other one is working fully
+// Not deleting yet since I dont know if the other one is working fully
 function messageType(message)
 {
 	var matches;
@@ -213,14 +213,16 @@ function messageType(message)
 				// Show the typing indicator
 				showLoading();             
 
-				// Call the method again
+				// Call the Method Again
 				theLoop(messageArray, i, numMessages);
 			}
+			
 		}, timeDelay[i]);
 	
 	// Pass the parameters back into the method
 	})(messageArray, i, numMessages);
 }
+
 
 
 function tempSplit(message)
