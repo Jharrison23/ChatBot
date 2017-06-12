@@ -42,7 +42,8 @@ function newRecievedMessage(messageText) {
 	if(removedQuotes.includes("<br "))
 	{
 		//messageType(removedQuotes);
-		tempSplit(removedQuotes);
+		// tempSplit(removedQuotes);
+		hopefullyFinalSplit(removedQuotes);
 	}
 
 	// If there is no \n, there arent multiple messages to be sent
@@ -224,7 +225,7 @@ function messageType(message)
 }
 
 
-
+///// old split method 
 function tempSplit(message)
 {
 
@@ -298,6 +299,58 @@ function tempSplit(message)
 
 }
 
+
+
+function hopefullyFinalSplit(message)
+{
+
+	var matches;
+	var listOfMessages = [];
+	
+	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<br(?:\s+\d+)?\>)|$)/g;
+
+	while(matches = regex.exec(message))
+	{
+
+		listOfMessages.push({
+				text: matches[2],
+				delay: matches[1]
+			});
+	}
+
+	// loop index 
+	var i = 0;
+
+	// Variable for the number of messages
+	var numMessages = listOfMessages.length;
+
+	// Show the typing indicator
+	showLoading();
+
+	// Function which calls the method createNewMessage after waiting 3 seconds
+	(function theLoop (listOfMessages, i, numMessages) 
+	{
+		// After 3 seconds call method createNewMessage
+		setTimeout(function () 
+		{
+			createNewMessage(listOfMessages[i].text);
+			
+			// If there are still more messages
+			if (i++ < numMessages - 1) 
+			{   
+				// Show the typing indicator
+				showLoading();             
+
+				// Call the method again
+				theLoop(listOfMessages, i, numMessages);
+			}
+
+		}, listOfMessages[i].delay);
+	
+	// Pass the parameters back into the method
+	})(listOfMessages, i, numMessages);
+
+}
 
 
 
