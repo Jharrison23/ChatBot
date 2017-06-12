@@ -41,7 +41,8 @@ function newRecievedMessage(messageText) {
 	// If the message contains a \n split it into an array of messages
 	if(removedQuotes.includes("<br "))
 	{
-		messageType(removedQuotes);
+		//messageType(removedQuotes);
+		tempSplit(removedQuotes);
 	}
 
 	// If there is no \n, there arent multiple messages to be sent
@@ -152,6 +153,8 @@ function checkVisibility(message)
 	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
 }
 
+// Old message parsing method, 
+// not deleting yet since I dont know if the other one is working fully
 function messageType(message)
 {
 	var matches;
@@ -220,6 +223,78 @@ function messageType(message)
 }
 
 
+function tempSplit(message)
+{
+
+	var matches;
+	var listOfMessages = [];
+	
+	var regex = /\<br\s+?(\d*)\>/g;
+
+	var nonGlobalRegex = /\<br\s+?\d*\>/;
+
+	var messageArray = message.split(nonGlobalRegex);
+
+	if(messageArray[0] == "")
+	{
+		messageArray = messageArray.splice(1);
+	}
+
+	var j = 0;	
+	
+	while(matches = regex.exec(message))
+	{
+		if(matches[1] != "")
+		{
+			listOfMessages.push({
+				text: messageArray[j],
+				delay: matches[1]
+			});		
+		}
+
+		else
+		{
+			listOfMessages.push({
+				text: messageArray[j],
+				delay: DEFAULT_TIME_DELAY
+			});
+		}
+		j++;
+	}
+
+	// loop index 
+	var i = 0;
+
+	// Variable for the number of messages
+	var numMessages = listOfMessages.length;
+
+	// Show the typing indicator
+	showLoading();
+
+	// Function which calls the method createNewMessage after waiting 3 seconds
+	(function theLoop (listOfMessages, i, numMessages) 
+	{
+		// After 3 seconds call method createNewMessage
+		setTimeout(function () 
+		{
+			createNewMessage(listOfMessages[i].text);
+			
+			// If there are still more messages
+			if (i++ < numMessages - 1) 
+			{   
+				// Show the typing indicator
+				showLoading();             
+
+				// Call the method again
+				theLoop(listOfMessages, i, numMessages);
+			}
+
+		}, listOfMessages[i].delay);
+	
+	// Pass the parameters back into the method
+	})(listOfMessages, i, numMessages);
+
+}
 
 
 
