@@ -42,8 +42,7 @@ function newRecievedMessage(messageText) {
 	if(removedQuotes.includes("<br "))
 	{
 		//messageType(removedQuotes);
-		// tempSplit(removedQuotes);
-		hopefullyFinalSplit(removedQuotes);
+		splitMessages(removedQuotes);
 	}
 
 	// If there is no \n, there arent multiple messages to be sent
@@ -154,154 +153,11 @@ function checkVisibility(message)
 	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
 }
 
-// Old message parsing method, 
-// Not deleting yet since I dont know if the other one is working fully
-function messageType(message)
-{
-	var matches;
-	var timeDelay = new Array(); 
 
-	var regex = /\<br = (\d*)\>/g;
-	
-	while(matches = regex.exec(message))
-	{
-		if(matches[1] != "")
-		{
-			timeDelay.push(matches[1] * 1000); 
-		}
-
-		else
-		{
-			timeDelay.push(DEFAULT_TIME_DELAY);
-		}
-	
-	}
-
-	console.log(timeDelay);
-
-	var nonGlobalRegex = /\<br = \d*\>/;
-
-	var messageArray = message.split(nonGlobalRegex);
-
-	if(messageArray[0] == "")
-	{
-		messageArray = messageArray.splice(1);
-	}
-
-	
-	console.log(messageArray);
-
-	// loop index 
-	var i = 0;
-
-	// Variable for the number of messages
-	var numMessages = messageArray.length;
-
-	// Show the typing indicator
-	showLoading();
-
-	// Function which calls the method createNewMessage after waiting 3 seconds
-	(function theLoop (messageArray, i, numMessages) 
-	{
-		// After 3 seconds call method createNewMessage
-		setTimeout(function () 
-		{
-			createNewMessage(messageArray[i]);
-			
-			// If there are still more messages
-			if (i++ < numMessages - 1) 
-			{   
-				// Show the typing indicator
-				showLoading();             
-
-				// Call the Method Again
-				theLoop(messageArray, i, numMessages);
-			}
-			
-		}, timeDelay[i]);
-	
-	// Pass the parameters back into the method
-	})(messageArray, i, numMessages);
-}
-
-
-///// old split method 
-function tempSplit(message)
-{
-
-	var matches;
-	var listOfMessages = [];
-	
-	var regex = /\<br\s+?(\d*)\>/g;
-
-	var nonGlobalRegex = /\<br\s+?\d*\>/;
-
-	var messageArray = message.split(nonGlobalRegex);
-
-	if(messageArray[0] == "")
-	{
-		messageArray = messageArray.splice(1);
-	}
-
-	var j = 0;	
-	
-	while(matches = regex.exec(message))
-	{
-		if(matches[1] != "")
-		{
-			listOfMessages.push({
-				text: messageArray[j],
-				delay: matches[1]
-			});		
-		}
-
-		else
-		{
-			listOfMessages.push({
-				text: messageArray[j],
-				delay: DEFAULT_TIME_DELAY
-			});
-		}
-		j++;
-	}
-
-	// loop index 
-	var i = 0;
-
-	// Variable for the number of messages
-	var numMessages = listOfMessages.length;
-
-	// Show the typing indicator
-	showLoading();
-
-	// Function which calls the method createNewMessage after waiting 3 seconds
-	(function theLoop (listOfMessages, i, numMessages) 
-	{
-		// After 3 seconds call method createNewMessage
-		setTimeout(function () 
-		{
-			createNewMessage(listOfMessages[i].text);
-			
-			// If there are still more messages
-			if (i++ < numMessages - 1) 
-			{   
-				// Show the typing indicator
-				showLoading();             
-
-				// Call the method again
-				theLoop(listOfMessages, i, numMessages);
-			}
-
-		}, listOfMessages[i].delay);
-	
-	// Pass the parameters back into the method
-	})(listOfMessages, i, numMessages);
-
-}
-
-
-
-function hopefullyFinalSplit(message)
+// Method which takes messages and splits them based off a the delimeter <br 2500>
+// The integer in the delimeter is optional and represents the time delay in milliseconds
+// if the delimeter is not there then the time delay is set to the default
+function splitMessages(message)
 {
 
 	var matches;
@@ -311,11 +167,17 @@ function hopefullyFinalSplit(message)
 
 	while(matches = regex.exec(message))
 	{
+		if(matches[1] == undefined)
+		{
+			matches[1] = DEFAULT_TIME_DELAY;
+		}
 
 		listOfMessages.push({
 				text: matches[2],
 				delay: matches[1]
 			});
+
+		console.log(matches[1]);
 	}
 
 	// loop index 
