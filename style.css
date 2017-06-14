@@ -169,3 +169,24 @@ body {
     margin: 10px;
     border-radius: 20px;
 }
+
+
+.buttonResponse {
+    color: white;
+    max-width: 80%;
+    width: auto;
+    margin: 5px 0 5px auto;
+    /*background: rgba(255, 153, 0, .7);*/
+    border-radius: 20px 20px 0px 20px;
+    background: rgb(64, 172, 246);
+    overflow-wrap: break-word;
+    font-size: 18px;
+    padding: 10px;
+    margin: 10px 20px;
+    /*order: -1;*/
+}
+
+#switchInputType {
+    bottom: 0;
+    right: 0;
+}

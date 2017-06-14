@@ -27,29 +27,41 @@ $("textarea").keypress(function(event) {
 });
 
 $("#rec").click(function(event) {
-				switchRecognition();
-			});
+	switchRecognition();
+});
+
+$("#switchInputType").click(function(event) {
+
+	$('#rec').toggle();
+	$('textarea').toggle();
+	$('.buttonResponse').toggle();
+
+});
 
 
 // Method called whenver there is a new recieved message
 // This message comes from the AJAX request sent to API.AI
+// This method tells which type of message is to be sent
+// Splits between the button messages, multi messages and single message
 function newRecievedMessage(messageText) {
 
 	// Variable storing the message with the "" removed
 	var removedQuotes = messageText.replace(/[""]/g,"");
 
-	// If the message contains a \n split it into an array of messages
-	if(removedQuotes.includes("<mm "))
-	{
-		//messageType(removedQuotes);
-		splitMessages(removedQuotes);
-	}
-
-	else if (removedQuotes.includes("<br ")) 
+	// If the message contains a <ar then it is a message with buttons
+	// for its response
+	if(removedQuotes.includes("<ar"))
 	{
 		createButton(removedQuotes);	
+	}
+
+	// if the message contains only <br then it is a multi line message
+	else if (removedQuotes.includes("<br")) 
+	{
+		splitMessages(removedQuotes);
 	} 
-	// If there is no \n, there arent multiple messages to be sent
+
+	// There arent multiple messages to be sent, or message with buttons
 	else
 	{	
 		// Show the typing indicator
@@ -226,6 +238,7 @@ function splitMessages(message)
 function createButton(message)
 {
 
+	
 	var matches;
 	var listOfMessages = [];
 	
@@ -233,10 +246,16 @@ function createButton(message)
 
 	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<ar(?:\s+\d+)?\>)|$)/g;
 
+	// Create object which stores the message response text and time delay
 	matches = regex.exec(message);
 
+	// Create an array of the responses which will be buttons
 	var buttonList = message.split(/<ar>/);
+
+	// Remove the first element
 	buttonList = buttonList.splice(1);
+
+	var listOfInputs = [];
 
 	for (var index = 0; index < buttonList.length; index++)
 	{
@@ -244,9 +263,26 @@ function createButton(message)
 
 		$input = $('<input type="button" class="buttonResponse"/>');
 		$input.val(response);
-		$input.appendTo($chatlogs);
+		listOfInputs.push($input);
+		
 
 	}
+
+// Show the typing indicator
+		showLoading();
+	// After 3 seconds call the createNewMessage function
+		setTimeout(function() {
+			
+			createNewMessage(matches[2]);
+			
+			$('#rec').toggle();
+			$('textarea').toggle();
+
+			for (var index = 0; index < listOfInputs.length; index++) {
+				listOfInputs[index].appendTo($('.chat-form'));
+			}
+
+		}, matches[1]);
 
 
 
