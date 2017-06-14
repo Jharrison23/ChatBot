@@ -30,6 +30,8 @@ $("#rec").click(function(event) {
 	switchRecognition();
 });
 
+$("#switchInputType").toggle();
+
 $("#switchInputType").click(function(event) {
 
 	$('#rec').toggle();
@@ -261,28 +263,42 @@ function createButton(message)
 	{
 		var response = buttonList[index];
 
-		$input = $('<input type="button" class="buttonResponse"/>');
+// $chatlogs.append(
+//         $('<div/>', {'class': 'chat self'}).append(
+//             $('<p/>', {'class': 'chat-message', 'text': text})));
+
+	
+		$input = $('<div/>', {'class': 'buttonResponse' }).append(
+            $('<p/>', {'class': 'chat-message', 'text': response}));
+
 		$input.val(response);
 		listOfInputs.push($input);
+
+		// $input = $('<input type="button" class="buttonResponse"/>');
+		// $input.val(response);
+		// listOfInputs.push($input);
 		
 
 	}
 
-// Show the typing indicator
-		showLoading();
+	// Show the typing indicator
+	showLoading();
+	
 	// After 3 seconds call the createNewMessage function
-		setTimeout(function() {
+	setTimeout(function() {
 			
-			createNewMessage(matches[2]);
-			
-			$('#rec').toggle();
-			$('textarea').toggle();
+		createNewMessage(matches[2]);
+		
+		$('#rec').toggle();
+		$('textarea').toggle();
 
-			for (var index = 0; index < listOfInputs.length; index++) {
-				listOfInputs[index].appendTo($('.chat-form'));
-			}
+		$("#switchInputType").toggle();
 
-		}, matches[1]);
+		for (var index = 0; index < listOfInputs.length; index++) {
+			listOfInputs[index].appendTo($('.chat-form'));
+		}
+
+	}, matches[1]);
 
 
 
