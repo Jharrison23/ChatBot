@@ -1,9 +1,11 @@
 // Information needed to access the api.ai bot, only thing needed to be changed 
-var accessToken = "5489544adf6d490c8438cb7377f4bd60";
+var accessToken = "b56ec2c85b2744ad81aeb6518d30a6ae";
 var baseUrl = "https://api.api.ai/v1/";
 
 // Variable for the chatlogs div
 var $chatlogs = $('.chatlogs');
+
+var DEFAULT_TIME_DELAY = 3000;
 
 
 // Method which executes once the enter key on the keyboard is pressed
@@ -39,52 +41,9 @@ function newRecievedMessage(messageText) {
 	// If the message contains a \n split it into an array of messages
 	if(removedQuotes.includes("<br "))
 	{
-		messageType(removedQuotes);
-
-		// var timeDelay = removedQuotes.match(/\<br = (\d+)\>/);
-
-		// console.log(timeDelay);
-
-		// // timeDelay = timeDelay[1];
-
-		// // console.log(timeDelay);
-
-		// //console.log(timeDelay[1]);
-		
-		// // Split the message up into multiple messages based off the amount of \n's
-		// var messageArray = removedQuotes.split(/\<br = \d+\>/g);
-		// console.log(messageArray);
-
-		// // loop index 
-		// var i = 0;
-
-		// // Variable for the number of messages
-		// var numMessages = messageArray.length;
-
-		// // Show the typing indicator
-		// showLoading();
-
-		// // Function which calls the method createNewMessage after waiting 3 seconds
-		// (function theLoop (messageArray, i, numMessages) 
-		// {
-		// 	// After 3 seconds call method createNewMessage
-		// 	setTimeout(function () 
-		// 	{
-		// 		createNewMessage(messageArray[i]);
-				
-		// 		// If there are still more messages
-		// 		if (i++ < numMessages - 1) 
-		// 		{   
-		// 			// Show the typing indicator
-		// 			showLoading();             
-
-		// 			// Call the method again
-		// 			theLoop(messageArray, i, numMessages);
-		// 		}
-		// 	}, timeDelay);
-		
-		// // Pass the parameters back into the method
-		// })(messageArray, i, numMessages);
+		//messageType(removedQuotes);
+		// tempSplit(removedQuotes);
+		hopefullyFinalSplit(removedQuotes);
 	}
 
 	// If there is no \n, there arent multiple messages to be sent
@@ -96,7 +55,7 @@ function newRecievedMessage(messageText) {
 		// After 3 seconds call the createNewMessage function
 		setTimeout(function() {
 			createNewMessage(removedQuotes);
-		}, 3000);
+		}, DEFAULT_TIME_DELAY);
 	}
 }
 
@@ -195,49 +154,41 @@ function checkVisibility(message)
 	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
 }
 
+// Old message parsing method, 
+// Not deleting yet since I dont know if the other one is working fully
 function messageType(message)
 {
 	var matches;
 	var timeDelay = new Array(); 
 
-	var regex = /\<br = (\d+)\>/g;
-	
-	// //timeDelay = message.match(/\<br = (\d+)\>/)
-	// timeDelay = regex.exec(message);
-	// console.log(timeDelay);
-
-	// //timeDelay = message.match(/\<br = (\d+)\>/)
-	// timeDelay = regex.exec(message);
-	// console.log(timeDelay);
-
-	// //timeDelay = message.match(/\<br = (\d+)\>/)
-	// timeDelay = regex.exec(message);
-	// console.log(timeDelay);
-
+	var regex = /\<br = (\d*)\>/g;
 	
 	while(matches = regex.exec(message))
 	{
-		timeDelay.push(matches[1]); 
+		if(matches[1] != "")
+		{
+			timeDelay.push(matches[1] * 1000); 
+		}
+
+		else
+		{
+			timeDelay.push(DEFAULT_TIME_DELAY);
+		}
+	
 	}
 
 	console.log(timeDelay);
 
+	var nonGlobalRegex = /\<br = \d*\>/;
 
-	var messageArray = message.split(/\<br = \d+\>/);
+	var messageArray = message.split(nonGlobalRegex);
 
 	if(messageArray[0] == "")
 	{
 		messageArray = messageArray.splice(1);
 	}
 
-	// timeDelay = timeDelay[1];
-
-	// console.log(timeDelay);
-
-	//console.log(timeDelay[1]);
 	
-	// Split the message up into multiple messages based off the amount of \n's
-	//var messageArray = message.split(/\<br = \d+\>/);
 	console.log(messageArray);
 
 	// loop index 
@@ -263,9 +214,10 @@ function messageType(message)
 				// Show the typing indicator
 				showLoading();             
 
-				// Call the method again
+				// Call the Method Again
 				theLoop(messageArray, i, numMessages);
 			}
+			
 		}, timeDelay[i]);
 	
 	// Pass the parameters back into the method
@@ -273,12 +225,132 @@ function messageType(message)
 }
 
 
+///// old split method 
+function tempSplit(message)
+{
+
+	var matches;
+	var listOfMessages = [];
+	
+	var regex = /\<br\s+?(\d*)\>/g;
+
+	var nonGlobalRegex = /\<br\s+?\d*\>/;
+
+	var messageArray = message.split(nonGlobalRegex);
+
+	if(messageArray[0] == "")
+	{
+		messageArray = messageArray.splice(1);
+	}
+
+	var j = 0;	
+	
+	while(matches = regex.exec(message))
+	{
+		if(matches[1] != "")
+		{
+			listOfMessages.push({
+				text: messageArray[j],
+				delay: matches[1]
+			});		
+		}
+
+		else
+		{
+			listOfMessages.push({
+				text: messageArray[j],
+				delay: DEFAULT_TIME_DELAY
+			});
+		}
+		j++;
+	}
+
+	// loop index 
+	var i = 0;
+
+	// Variable for the number of messages
+	var numMessages = listOfMessages.length;
+
+	// Show the typing indicator
+	showLoading();
+
+	// Function which calls the method createNewMessage after waiting 3 seconds
+	(function theLoop (listOfMessages, i, numMessages) 
+	{
+		// After 3 seconds call method createNewMessage
+		setTimeout(function () 
+		{
+			createNewMessage(listOfMessages[i].text);
+			
+			// If there are still more messages
+			if (i++ < numMessages - 1) 
+			{   
+				// Show the typing indicator
+				showLoading();             
+
+				// Call the method again
+				theLoop(listOfMessages, i, numMessages);
+			}
+
+		}, listOfMessages[i].delay);
+	
+	// Pass the parameters back into the method
+	})(listOfMessages, i, numMessages);
+
+}
 
 
 
+function hopefullyFinalSplit(message)
+{
 
+	var matches;
+	var listOfMessages = [];
+	
+	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<br(?:\s+\d+)?\>)|$)/g;
 
+	while(matches = regex.exec(message))
+	{
 
+		listOfMessages.push({
+				text: matches[2],
+				delay: matches[1]
+			});
+	}
+
+	// loop index 
+	var i = 0;
+
+	// Variable for the number of messages
+	var numMessages = listOfMessages.length;
+
+	// Show the typing indicator
+	showLoading();
+
+	// Function which calls the method createNewMessage after waiting 3 seconds
+	(function theLoop (listOfMessages, i, numMessages) 
+	{
+		// After 3 seconds call method createNewMessage
+		setTimeout(function () 
+		{
+			createNewMessage(listOfMessages[i].text);
+			
+			// If there are still more messages
+			if (i++ < numMessages - 1) 
+			{   
+				// Show the typing indicator
+				showLoading();             
+
+				// Call the method again
+				theLoop(listOfMessages, i, numMessages);
+			}
+
+		}, listOfMessages[i].delay);
+	
+	// Pass the parameters back into the method
+	})(listOfMessages, i, numMessages);
+
+}
 
 
 
@@ -358,10 +430,28 @@ function updateRec() {
 function speechResponse(message)
 {
 
+	// var msg = new SpeechSynthesisUtterance();
+ 	// msg.voiceURI = "native";
+  	// msg.text = message;
+  	// msg.lang = "en-US";
+  	// window.speechSynthesis.speak(msg);
+
+
 	var msg = new SpeechSynthesisUtterance();
- 	msg.voiceURI = "native";
+
+	// These lines list all of the voices which can be used in speechSynthesis
+	//var voices = speechSynthesis.getVoices();
+	//console.log(voices);
+	
+	
+	msg.default = false;
+ 	msg.voiceURI = "Fiona";
+	msg.name = "Fiona";
+	msg.localService = true;
   	msg.text = message;
-  	msg.lang = "en-US";
+  	msg.lang = "en";
+	msg.rate = 1;
+	msg.volume = 1;
   	window.speechSynthesis.speak(msg);
 
 }

@@ -132,6 +132,7 @@ body {
 }
 
 .chat-form textarea {
+    padding: 5px;
     background: #fbfbfb;
     width: 75%;
     height: 65px;
@@ -164,6 +165,7 @@ body {
     background: rgb(255, 153, 0);
 }
 
-.gif img{
+.gif img {
+    margin: 10px;
     border-radius: 20px;
 }
