@@ -39,12 +39,16 @@ function newRecievedMessage(messageText) {
 	var removedQuotes = messageText.replace(/[""]/g,"");
 
 	// If the message contains a \n split it into an array of messages
-	if(removedQuotes.includes("<br "))
+	if(removedQuotes.includes("<mm "))
 	{
 		//messageType(removedQuotes);
 		splitMessages(removedQuotes);
 	}
 
+	else if (removedQuotes.includes("<br ")) 
+	{
+		createButton(removedQuotes);	
+	} 
 	// If there is no \n, there arent multiple messages to be sent
 	else
 	{	
@@ -64,9 +68,9 @@ function createNewMessage(message) {
 	// Hide the typing indicator
 	hideLoading();
 
-	 
+	 //Commented out speech response
 	// take the message and say it back to the user.
-	speechResponse(message);
+	///////sponse(message);
 
 	// Show the send button and the text area
 	$('#rec').css('visibility', 'visible');
@@ -154,6 +158,9 @@ function checkVisibility(message)
 }
 
 
+
+
+
 // Method which takes messages and splits them based off a the delimeter <br 2500>
 // The integer in the delimeter is optional and represents the time delay in milliseconds
 // if the delimeter is not there then the time delay is set to the default
@@ -213,6 +220,48 @@ function splitMessages(message)
 	})(listOfMessages, i, numMessages);
 
 }
+
+
+
+function createButton(message)
+{
+
+	var matches;
+	var listOfMessages = [];
+	
+	var $input;
+
+	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<ar(?:\s+\d+)?\>)|$)/g;
+
+	matches = regex.exec(message);
+
+	var buttonList = message.split(/<ar>/);
+	buttonList = buttonList.splice(1);
+
+	for (var index = 0; index < buttonList.length; index++)
+	{
+		var response = buttonList[index];
+
+		$input = $('<input type="button" class="buttonResponse"/>');
+		$input.val(response);
+		$input.appendTo($chatlogs);
+
+	}
+
+
+
+	console.log(matches);
+	console.log(buttonList);
+
+
+
+}
+
+
+
+
+
+
 
 
 
@@ -302,8 +351,8 @@ function speechResponse(message)
 	var msg = new SpeechSynthesisUtterance();
 
 	// These lines list all of the voices which can be used in speechSynthesis
-	//var voices = speechSynthesis.getVoices();
-	//console.log(voices);
+	var voices = speechSynthesis.getVoices();
+	console.log(voices);
 	
 	
 	msg.default = false;
@@ -312,7 +361,7 @@ function speechResponse(message)
 	msg.localService = true;
   	msg.text = message;
   	msg.lang = "en";
-	msg.rate = 1;
+	msg.rate = .9;
 	msg.volume = 1;
   	window.speechSynthesis.speak(msg);
 
