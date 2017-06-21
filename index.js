@@ -1,11 +1,36 @@
 // Information needed to access the api.ai bot, only thing needed to be changed 
-var accessToken = "b56ec2c85b2744ad81aeb6518d30a6ae";
+
+// Datanautix help bot
+//var accessToken = "b56ec2c85b2744ad81aeb6518d30a6ae";
+
+// Emoji Bot
+var accessToken ="5ae7adf062fa4b5692087da997d2e3a5";
+
 var baseUrl = "https://api.api.ai/v1/";
 
 // Variable for the chatlogs div
 var $chatlogs = $('.chatlogs');
 
 var DEFAULT_TIME_DELAY = 3000;
+
+// If the user selects one of the dynamic button responses
+$('.chat-form').on("click", '.buttonResponse', function() {
+
+	// Send the text on the button as a user message
+	send(this.innerText);
+
+	// Show the record button and text input area
+	$('#rec').toggle();
+	$('textarea').toggle();
+
+	// Hide the button responses and the switch input button
+	$('.buttonResponse').toggle();
+	$('#switchInputType').hide();
+
+	// Remove the button responses from the div
+	$('.buttonResponse').remove();
+});
+
 
 
 // Method which executes once the enter key on the keyboard is pressed
@@ -26,27 +51,54 @@ $("textarea").keypress(function(event) {
     }
 });
 
+
+// If the user presses the button for voice input
 $("#rec").click(function(event) {
-				switchRecognition();
-			});
+
+	// Call the method to switch recognition to voice input
+	switchRecognition();
+});
+
+// Hide the switch input type button initially
+$("#switchInputType").toggle();
+
+// If the switch input type button is pressed
+$("#switchInputType").click(function(event) {
+
+	// Toggle which input type is shown
+	$('#rec').toggle();
+	$('textarea').toggle();
+	$('.buttonResponse').toggle();
+
+});
+
+
+
 
 
 // Method called whenver there is a new recieved message
 // This message comes from the AJAX request sent to API.AI
+// This method tells which type of message is to be sent
+// Splits between the button messages, multi messages and single message
 function newRecievedMessage(messageText) {
 
 	// Variable storing the message with the "" removed
 	var removedQuotes = messageText.replace(/[""]/g,"");
 
-	// If the message contains a \n split it into an array of messages
-	if(removedQuotes.includes("<br "))
+	// If the message contains a <ar then it is a message
+	// whose responses are buttons
+	if(removedQuotes.includes("<ar"))
 	{
-		//messageType(removedQuotes);
-		// tempSplit(removedQuotes);
-		hopefullyFinalSplit(removedQuotes);
+		buttonResponse(removedQuotes);	
 	}
 
-	// If there is no \n, there arent multiple messages to be sent
+	// if the message contains only <br then it is a multi line message
+	else if (removedQuotes.includes("<br")) 
+	{
+		multiMessage(removedQuotes);
+	} 
+
+	// There arent multiple messages to be sent, or message with buttons
 	else
 	{	
 		// Show the typing indicator
@@ -59,15 +111,18 @@ function newRecievedMessage(messageText) {
 	}
 }
 
+
+
+
 // Method to create a new div showing the text from API.AI
 function createNewMessage(message) {
 
 	// Hide the typing indicator
 	hideLoading();
 
-	 
+	 //Commented out speech response
 	// take the message and say it back to the user.
-	speechResponse(message);
+	///////sponse(message);
 
 	// Show the send button and the text area
 	$('#rec').css('visibility', 'visible');
@@ -85,6 +140,8 @@ function createNewMessage(message) {
 	// Call the method to see if the message is visible
 	checkVisibility($newMessage);
 }
+
+
 
 
 // Method which takes the users text and sends an AJAX post request to API.AI
@@ -127,6 +184,8 @@ function send(text) {
 }
 
 
+
+
 // Funtion which shows the typing indicator
 // As well as hides the textarea and send button
 function showLoading()
@@ -139,12 +198,14 @@ function showLoading()
  }
 
 
+
+
 // Function which hides the typing indicator
 function hideLoading()
 {
 	$("#loadingGif").hide();
-
 }
+
 
 
 // Method which checks to see if a message is in visible
@@ -154,169 +215,41 @@ function checkVisibility(message)
 	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
 }
 
-// Old message parsing method, 
-// Not deleting yet since I dont know if the other one is working fully
-function messageType(message)
-{
-	var matches;
-	var timeDelay = new Array(); 
-
-	var regex = /\<br = (\d*)\>/g;
-	
-	while(matches = regex.exec(message))
-	{
-		if(matches[1] != "")
-		{
-			timeDelay.push(matches[1] * 1000); 
-		}
-
-		else
-		{
-			timeDelay.push(DEFAULT_TIME_DELAY);
-		}
-	
-	}
-
-	console.log(timeDelay);
-
-	var nonGlobalRegex = /\<br = \d*\>/;
-
-	var messageArray = message.split(nonGlobalRegex);
-
-	if(messageArray[0] == "")
-	{
-		messageArray = messageArray.splice(1);
-	}
-
-	
-	console.log(messageArray);
-
-	// loop index 
-	var i = 0;
-
-	// Variable for the number of messages
-	var numMessages = messageArray.length;
-
-	// Show the typing indicator
-	showLoading();
-
-	// Function which calls the method createNewMessage after waiting 3 seconds
-	(function theLoop (messageArray, i, numMessages) 
-	{
-		// After 3 seconds call method createNewMessage
-		setTimeout(function () 
-		{
-			createNewMessage(messageArray[i]);
-			
-			// If there are still more messages
-			if (i++ < numMessages - 1) 
-			{   
-				// Show the typing indicator
-				showLoading();             
-
-				// Call the Method Again
-				theLoop(messageArray, i, numMessages);
-			}
-			
-		}, timeDelay[i]);
-	
-	// Pass the parameters back into the method
-	})(messageArray, i, numMessages);
-}
 
 
-///// old split method 
-function tempSplit(message)
+
+
+// Method which takes messages and splits them based off a the delimeter <br 2500>
+// The integer in the delimeter is optional and represents the time delay in milliseconds
+// if the delimeter is not there then the time delay is set to the default
+function multiMessage(message)
 {
 
+	// Stores the matches in the message, which match the regex
 	var matches;
+
+	// List of message objects, each message will have a text and time delay
 	var listOfMessages = [];
 	
-	var regex = /\<br\s+?(\d*)\>/g;
-
-	var nonGlobalRegex = /\<br\s+?\d*\>/;
-
-	var messageArray = message.split(nonGlobalRegex);
-
-	if(messageArray[0] == "")
-	{
-		messageArray = messageArray.splice(1);
-	}
-
-	var j = 0;	
-	
-	while(matches = regex.exec(message))
-	{
-		if(matches[1] != "")
-		{
-			listOfMessages.push({
-				text: messageArray[j],
-				delay: matches[1]
-			});		
-		}
-
-		else
-		{
-			listOfMessages.push({
-				text: messageArray[j],
-				delay: DEFAULT_TIME_DELAY
-			});
-		}
-		j++;
-	}
-
-	// loop index 
-	var i = 0;
-
-	// Variable for the number of messages
-	var numMessages = listOfMessages.length;
-
-	// Show the typing indicator
-	showLoading();
-
-	// Function which calls the method createNewMessage after waiting 3 seconds
-	(function theLoop (listOfMessages, i, numMessages) 
-	{
-		// After 3 seconds call method createNewMessage
-		setTimeout(function () 
-		{
-			createNewMessage(listOfMessages[i].text);
-			
-			// If there are still more messages
-			if (i++ < numMessages - 1) 
-			{   
-				// Show the typing indicator
-				showLoading();             
-
-				// Call the method again
-				theLoop(listOfMessages, i, numMessages);
-			}
-
-		}, listOfMessages[i].delay);
-	
-	// Pass the parameters back into the method
-	})(listOfMessages, i, numMessages);
-
-}
-
-
-
-function hopefullyFinalSplit(message)
-{
-
-	var matches;
-	var listOfMessages = [];
-	
+	// Regex used to find time delay and text of each message
 	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<br(?:\s+\d+)?\>)|$)/g;
 
+	// While matches are still being found in the message
 	while(matches = regex.exec(message))
 	{
+		// if the time delay is undefined(empty) use the default time delay
+		if(matches[1] == undefined)
+		{
+			matches[1] = DEFAULT_TIME_DELAY;
+		}
 
+		// Create a message object and add it to the list of messages
 		listOfMessages.push({
 				text: matches[2],
 				delay: matches[1]
-			});
+		});
 	}
+
 
 	// loop index 
 	var i = 0;
@@ -327,12 +260,15 @@ function hopefullyFinalSplit(message)
 	// Show the typing indicator
 	showLoading();
 
-	// Function which calls the method createNewMessage after waiting 3 seconds
+	// Function which calls the method createNewMessage after waiting on the message delay
 	(function theLoop (listOfMessages, i, numMessages) 
 	{
-		// After 3 seconds call method createNewMessage
+
+		// Method which executes after the timedelay
 		setTimeout(function () 
 		{
+
+			// Create a new message from the server
 			createNewMessage(listOfMessages[i].text);
 			
 			// If there are still more messages
@@ -344,11 +280,81 @@ function hopefullyFinalSplit(message)
 				// Call the method again
 				theLoop(listOfMessages, i, numMessages);
 			}
-
 		}, listOfMessages[i].delay);
 	
 	// Pass the parameters back into the method
 	})(listOfMessages, i, numMessages);
+
+}
+
+
+// Method called whenever an <ar tag is found
+// The responses for this type of message will be buttons
+// This method parses out the time delays, message text and button responses
+// Then creates a new message with the time delay and creates buttons for the responses
+function buttonResponse(message)
+{
+
+	// Stores the matches in the message, which match the regex
+	var matches;
+
+	// Used to store the new HTML div which will be the button	
+	var $input;
+
+	// Regex used to find time delay, text of the message and responses to be buttons
+	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<ar(?:\s+\d+)?\>)|$)/g;
+
+	// Seach the message and capture the groups which match the regex
+	matches = regex.exec(message);
+
+	// Create an array of the responses which will be buttons
+	var buttonList = message.split(/<ar>/);
+
+	// Remove the first element, The first split is the actual message
+	buttonList = buttonList.splice(1);
+
+	// Array which will store all of the newly created buttons
+	var listOfInputs = [];
+
+	// Loop through each response and create a button
+	for (var index = 0; index < buttonList.length; index++)
+	{
+		// Store the current button response
+		var response = buttonList[index];
+		
+		// Create a new div element with the text for the current button response
+		$input = $('<div/>', {'class': 'buttonResponse' }).append(
+            $('<p/>', {'class': 'chat-message', 'text': response}));
+
+		// add the new button to the list of buttons
+		listOfInputs.push($input);
+	}
+
+
+	// Show the typing indicator
+	showLoading();
+	
+	// After the time delay call the createNewMessage function
+	setTimeout(function() {
+			
+		// Create and display a new message with the text from the server
+		createNewMessage(matches[2]);
+		
+		// Hide the send button and the text area
+		$('#rec').toggle();
+		$('textarea').toggle();
+
+		// Show the switch input button
+		$("#switchInputType").show();
+
+		// For each of the button responses
+		for (var index = 0; index < listOfInputs.length; index++) {
+						
+			// Append to the chat-form div which is at the bottom of the chatbox
+			listOfInputs[index].appendTo($('.chat-form'));
+		}	
+		
+	}, matches[1]);
 
 }
 
@@ -440,8 +446,8 @@ function speechResponse(message)
 	var msg = new SpeechSynthesisUtterance();
 
 	// These lines list all of the voices which can be used in speechSynthesis
-	//var voices = speechSynthesis.getVoices();
-	//console.log(voices);
+	var voices = speechSynthesis.getVoices();
+	console.log(voices);
 	
 	
 	msg.default = false;
@@ -450,7 +456,7 @@ function speechResponse(message)
 	msg.localService = true;
   	msg.text = message;
   	msg.lang = "en";
-	msg.rate = 1;
+	msg.rate = .9;
 	msg.volume = 1;
   	window.speechSynthesis.speak(msg);
 
