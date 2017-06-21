@@ -8,76 +8,78 @@ var accessToken ="5ae7adf062fa4b5692087da997d2e3a5";
 
 var baseUrl = "https://api.api.ai/v1/";
 
-// Variable for the chatlogs div
-var $chatlogs = $('.chatlogs');
-
 var DEFAULT_TIME_DELAY = 3000;
 
+// Variable for the chatlogs div
+var $chatlogs = $('.chatlogs');
+	
 
-// Hide the switch input type button initially
-$("#switchInputType").toggle();
+$('document').ready(function(){
+	
+	// Hide the switch input type button initially
+	$("#switchInputType").toggle();
 
-// If the switch input type button is pressed
-$("#switchInputType").click(function(event) {
+	// If the switch input type button is pressed
+	$("#switchInputType").click(function(event) {
 
-	// Toggle which input type is shown
-	$('#rec').toggle();
-	$('textarea').toggle();
-	$('.buttonResponse').toggle();
+		// Toggle which input type is shown
+		$('#rec').toggle();
+		$('textarea').toggle();
+		$('.buttonResponse').toggle();
 
-});
-
-
-
-
-//----------------------User Sends Message Methods--------------------------------//
-// Method which executes once the enter key on the keyboard is pressed
-// Primary function sends the text which the user typed
-$("textarea").keypress(function(event) {
-    
-	// If the enter key is pressed
-    if(event.which === 13) {
-
-		// Ignore the default function of the enter key(Dont go to a new line)
-        event.preventDefault();
-
-		// Call the method for sending a message, pass in the text from the user
-   	    send(this.value);
-
-		// Clear the text area
-        this.value = "";
-    }
-});
-
-
-// If the user presses the button for voice input
-$("#rec").click(function(event) {
-
-	// Call the method to switch recognition to voice input
-	switchRecognition();
-});
+	});
 
 
 
-// If the user selects one of the dynamic button responses
-$('.chat-form').on("click", '.buttonResponse', function() {
 
-	// Send the text on the button as a user message
-	send(this.innerText);
+	//----------------------User Sends Message Methods--------------------------------//
+	// Method which executes once the enter key on the keyboard is pressed
+	// Primary function sends the text which the user typed
+	$("textarea").keypress(function(event) {
+		
+		// If the enter key is pressed
+		if(event.which === 13) {
 
-	// Show the record button and text input area
-	$('#rec').toggle();
-	$('textarea').toggle();
+			// Ignore the default function of the enter key(Dont go to a new line)
+			event.preventDefault();
 
-	// Hide the button responses and the switch input button
-	$('.buttonResponse').toggle();
-	$('#switchInputType').hide();
+			// Call the method for sending a message, pass in the text from the user
+			send(this.value);
 
-	// Remove the button responses from the div
-	$('.buttonResponse').remove();
-});
+			// Clear the text area
+			this.value = "";
+		}
+	});
 
 
+	// If the user presses the button for voice input
+	$("#rec").click(function(event) {
+
+		// Call the method to switch recognition to voice input
+		switchRecognition();
+	});
+
+
+
+	// If the user selects one of the dynamic button responses
+	$('.chat-form').on("click", '.buttonResponse', function() {
+
+		// Send the text on the button as a user message
+		send(this.innerText);
+
+		// Show the record button and text input area
+		$('#rec').toggle();
+		$('textarea').toggle();
+
+		// Hide the button responses and the switch input button
+		$('.buttonResponse').toggle();
+		$('#switchInputType').hide();
+
+		// Remove the button responses from the div
+		$('.buttonResponse').remove();
+	});
+
+})
 
 
 // Method which takes the users text and sends an AJAX post request to API.AI
@@ -445,18 +447,11 @@ function updateRec() {
 function speechResponse(message)
 {
 
-	// var msg = new SpeechSynthesisUtterance();
- 	// msg.voiceURI = "native";
-  	// msg.text = message;
-  	// msg.lang = "en-US";
-  	// window.speechSynthesis.speak(msg);
-
-
 	var msg = new SpeechSynthesisUtterance();
 
 	// These lines list all of the voices which can be used in speechSynthesis
-	var voices = speechSynthesis.getVoices();
-	console.log(voices);
+	//var voices = speechSynthesis.getVoices();
+	//console.log(voices);
 	
 	
 	msg.default = false;
