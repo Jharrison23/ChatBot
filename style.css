@@ -128,7 +128,9 @@ body {
 .chat-form {
     margin-top: 20px;
     display: flex;
+    width: 65;
     align-items: flex-start;
+    overflow: auto;
 }
 
 .chat-form textarea {
@@ -186,7 +188,19 @@ body {
     /*order: -1;*/
 }
 
-#switchInputType {
-    bottom: 0;
-    right: 0;
+.buttonResponse:hover{
+        background: rgb(100, 200, 255);
+}
+/*
+#switchInputDiv {
+    position: fixed;
+    right: 580px;
+    padding-right: 10px;
+}*/
+
+
+#switchInputType{
+    width: 40px;
+    height: 40px;
+   
 }

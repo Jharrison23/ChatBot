@@ -1,9 +1,27 @@
 // Information needed to access the api.ai bot, only thing needed to be changed 
-var accessToken = "b56ec2c85b2744ad81aeb6518d30a6ae";
+
+// Datanautix help bot
+//var accessToken = "b56ec2c85b2744ad81aeb6518d30a6ae";
+
+// Emoji Bot
+var accessToken ="5ae7adf062fa4b5692087da997d2e3a5";
+
+
 var baseUrl = "https://api.api.ai/v1/";
 
 // Variable for the chatlogs div
 var $chatlogs = $('.chatlogs');
+
+$('.chat-form').on("click", '.buttonResponse', function() {
+			console.log(this.innerText);
+			send(this.innerText);
+			$('#rec').toggle();
+			$('textarea').toggle();
+			$('.buttonResponse').toggle();
+			$('#switchInputType').hide();
+
+			$('.buttonResponse').remove();
+	});
 
 var DEFAULT_TIME_DELAY = 3000;
 
@@ -160,7 +178,6 @@ function showLoading()
 function hideLoading()
 {
 	$("#loadingGif").hide();
-
 }
 
 
@@ -248,7 +265,6 @@ function createButton(message)
 
 	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<ar(?:\s+\d+)?\>)|$)/g;
 
-	// Create object which stores the message response text and time delay
 	matches = regex.exec(message);
 
 	// Create an array of the responses which will be buttons
@@ -262,24 +278,17 @@ function createButton(message)
 	for (var index = 0; index < buttonList.length; index++)
 	{
 		var response = buttonList[index];
-
-// $chatlogs.append(
-//         $('<div/>', {'class': 'chat self'}).append(
-//             $('<p/>', {'class': 'chat-message', 'text': text})));
-
-	
+		
 		$input = $('<div/>', {'class': 'buttonResponse' }).append(
             $('<p/>', {'class': 'chat-message', 'text': response}));
 
-		$input.val(response);
-		listOfInputs.push($input);
-
-		// $input = $('<input type="button" class="buttonResponse"/>');
-		// $input.val(response);
-		// listOfInputs.push($input);
 		
+		$input.val(response);
 
+		listOfInputs.push($input);
 	}
+
+
 
 	// Show the typing indicator
 	showLoading();
@@ -289,31 +298,33 @@ function createButton(message)
 			
 		createNewMessage(matches[2]);
 		
+		// Show the send button and the text area
 		$('#rec').toggle();
 		$('textarea').toggle();
 
-		$("#switchInputType").toggle();
+		$("#switchInputType").show();
 
 		for (var index = 0; index < listOfInputs.length; index++) {
-			listOfInputs[index].appendTo($('.chat-form'));
-		}
+			
 
+			console.log(listOfInputs[index].val());
+			
+			listOfInputs[index].appendTo($('.chat-form'));
+
+			console.log(listOfInputs[index].innerText);
+		
+		}	
+		
 	}, matches[1]);
 
-
-
+	
+ 
 	console.log(matches);
 	console.log(buttonList);
 
 
 
 }
-
-
-
-
-
-
 
 
 
