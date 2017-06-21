@@ -13,26 +13,24 @@ var $chatlogs = $('.chatlogs');
 
 var DEFAULT_TIME_DELAY = 3000;
 
-// If the user selects one of the dynamic button responses
-$('.chat-form').on("click", '.buttonResponse', function() {
 
-	// Send the text on the button as a user message
-	send(this.innerText);
+// Hide the switch input type button initially
+$("#switchInputType").toggle();
 
-	// Show the record button and text input area
+// If the switch input type button is pressed
+$("#switchInputType").click(function(event) {
+
+	// Toggle which input type is shown
 	$('#rec').toggle();
 	$('textarea').toggle();
-
-	// Hide the button responses and the switch input button
 	$('.buttonResponse').toggle();
-	$('#switchInputType').hide();
 
-	// Remove the button responses from the div
-	$('.buttonResponse').remove();
 });
 
 
 
+
+//----------------------User Sends Message Methods--------------------------------//
 // Method which executes once the enter key on the keyboard is pressed
 // Primary function sends the text which the user typed
 $("textarea").keypress(function(event) {
@@ -59,87 +57,25 @@ $("#rec").click(function(event) {
 	switchRecognition();
 });
 
-// Hide the switch input type button initially
-$("#switchInputType").toggle();
 
-// If the switch input type button is pressed
-$("#switchInputType").click(function(event) {
 
-	// Toggle which input type is shown
+// If the user selects one of the dynamic button responses
+$('.chat-form').on("click", '.buttonResponse', function() {
+
+	// Send the text on the button as a user message
+	send(this.innerText);
+
+	// Show the record button and text input area
 	$('#rec').toggle();
 	$('textarea').toggle();
+
+	// Hide the button responses and the switch input button
 	$('.buttonResponse').toggle();
+	$('#switchInputType').hide();
 
+	// Remove the button responses from the div
+	$('.buttonResponse').remove();
 });
-
-
-
-
-
-// Method called whenver there is a new recieved message
-// This message comes from the AJAX request sent to API.AI
-// This method tells which type of message is to be sent
-// Splits between the button messages, multi messages and single message
-function newRecievedMessage(messageText) {
-
-	// Variable storing the message with the "" removed
-	var removedQuotes = messageText.replace(/[""]/g,"");
-
-	// If the message contains a <ar then it is a message
-	// whose responses are buttons
-	if(removedQuotes.includes("<ar"))
-	{
-		buttonResponse(removedQuotes);	
-	}
-
-	// if the message contains only <br then it is a multi line message
-	else if (removedQuotes.includes("<br")) 
-	{
-		multiMessage(removedQuotes);
-	} 
-
-	// There arent multiple messages to be sent, or message with buttons
-	else
-	{	
-		// Show the typing indicator
-		showLoading();
-
-		// After 3 seconds call the createNewMessage function
-		setTimeout(function() {
-			createNewMessage(removedQuotes);
-		}, DEFAULT_TIME_DELAY);
-	}
-}
-
-
-
-
-// Method to create a new div showing the text from API.AI
-function createNewMessage(message) {
-
-	// Hide the typing indicator
-	hideLoading();
-
-	 //Commented out speech response
-	// take the message and say it back to the user.
-	///////sponse(message);
-
-	// Show the send button and the text area
-	$('#rec').css('visibility', 'visible');
-	$('textarea').css('visibility', 'visible');
-
-	// Append a new div to the chatlogs body, with an image and the text from API.AI
-	$chatlogs.append(
-		$('<div/>', {'class': 'chat friend'}).append(
-			$('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
-			$('<p/>', {'class': 'chat-message', 'text': message})));
-
-	// Find the last message in the chatlogs
-	var $newMessage = $(".chatlogs .chat").last();
-
-	// Call the method to see if the message is visible
-	checkVisibility($newMessage);
-}
 
 
 
@@ -186,35 +122,43 @@ function send(text) {
 
 
 
-// Funtion which shows the typing indicator
-// As well as hides the textarea and send button
-function showLoading()
-{
-	$chatlogs.append($('#loadingGif'));
-	$("#loadingGif").show();
-
-	$('#rec').css('visibility', 'hidden');
-	$('textarea').css('visibility', 'hidden');
- }
+//----------------------User Receives Message Methods--------------------------------//
 
 
+// Method called whenver there is a new recieved message
+// This message comes from the AJAX request sent to API.AI
+// This method tells which type of message is to be sent
+// Splits between the button messages, multi messages and single message
+function newRecievedMessage(messageText) {
 
+	// Variable storing the message with the "" removed
+	var removedQuotes = messageText.replace(/[""]/g,"");
 
-// Function which hides the typing indicator
-function hideLoading()
-{
-	$("#loadingGif").hide();
+	// If the message contains a <ar then it is a message
+	// whose responses are buttons
+	if(removedQuotes.includes("<ar"))
+	{
+		buttonResponse(removedQuotes);	
+	}
+
+	// if the message contains only <br then it is a multi line message
+	else if (removedQuotes.includes("<br")) 
+	{
+		multiMessage(removedQuotes);
+	} 
+
+	// There arent multiple messages to be sent, or message with buttons
+	else
+	{	
+		// Show the typing indicator
+		showLoading();
+
+		// After 3 seconds call the createNewMessage function
+		setTimeout(function() {
+			createNewMessage(removedQuotes);
+		}, DEFAULT_TIME_DELAY);
+	}
 }
-
-
-
-// Method which checks to see if a message is in visible
-function checkVisibility(message)
-{
-	// Scroll the view down a certain amount
-	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
-}
-
 
 
 
@@ -286,6 +230,8 @@ function multiMessage(message)
 	})(listOfMessages, i, numMessages);
 
 }
+
+
 
 
 // Method called whenever an <ar tag is found
@@ -360,6 +306,69 @@ function buttonResponse(message)
 
 
 
+
+// Method to create a new div showing the text from API.AI
+function createNewMessage(message) {
+
+	// Hide the typing indicator
+	hideLoading();
+
+	// take the message and say it back to the user.
+	speechResponse(message);
+
+	// Show the send button and the text area
+	$('#rec').css('visibility', 'visible');
+	$('textarea').css('visibility', 'visible');
+
+	// Append a new div to the chatlogs body, with an image and the text from API.AI
+	$chatlogs.append(
+		$('<div/>', {'class': 'chat friend'}).append(
+			$('<div/>', {'class': 'user-photo'}).append($('<img src="ana.JPG" />')), 
+			$('<p/>', {'class': 'chat-message', 'text': message})));
+
+	// Find the last message in the chatlogs
+	var $newMessage = $(".chatlogs .chat").last();
+
+	// Call the method to see if the message is visible
+	checkVisibility($newMessage);
+}
+
+
+
+
+// Funtion which shows the typing indicator
+// As well as hides the textarea and send button
+function showLoading()
+{
+	$chatlogs.append($('#loadingGif'));
+	$("#loadingGif").show();
+
+	$('#rec').css('visibility', 'hidden');
+	$('textarea').css('visibility', 'hidden');
+ }
+
+
+
+// Function which hides the typing indicator
+function hideLoading()
+{
+	$("#loadingGif").hide();
+}
+
+
+
+// Method which checks to see if a message is in visible
+function checkVisibility(message)
+{
+	// Scroll the view down a certain amount
+	$chatlogs.stop().animate({scrollTop: $chatlogs[0].scrollHeight});
+}
+
+
+
+
+
+//----------------------Voice Message Methods--------------------------------//
 //Voice stuff
 var recognition;
 
