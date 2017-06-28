@@ -1,12 +1,41 @@
+
+//---------------------------------- Credentials Section ----------------------------------//
+// All credentials come from credentials.js which isnt on github
+
 // Information needed to access the api.ai bot, only thing needed to be changed 
-
-// Datanautix help bot
-//var accessToken = "b56ec2c85b2744ad81aeb6518d30a6ae";
-
 // Emoji Bot
-var accessToken ="5ae7adf062fa4b5692087da997d2e3a5";
+var accessToken = credentialsAccessToken;
 
-var baseUrl = "https://api.api.ai/v1/";
+//var bot name is used for the firebase database
+var botName = credentialsBotName;
+
+var baseUrl = credentialsBaseUrl;
+
+// Initialize Firebase
+var config = credentialsConfig;
+// The format for config is as follows
+// Set the configuration for your app
+// TODO: Replace with your project's config object
+// You can get this information by creating a project and clicking connect with web or start with web
+// var config = {
+// 	apiKey: "apiKey",
+// 	authDomain: "projectId.firebaseapp.com",
+// 	databaseURL: "https://databaseName.firebaseio.com",
+// 	storageBucket: "bucket.appspot.com"
+// };
+
+
+firebase.initializeApp(config);
+
+// Key for this instance of the chat interface
+var newKey = firebase.database().ref(botName).push().key;
+console.log("Key for this chat instance = " + newKey);
+
+//---------------------------------- Main Code Area ----------------------------------//
+//  Variables to be used for storing the last message sent and recieved for the database
+var lastSentMessage = "";
+var lastRecievedMessage = 1;
+
 
 var DEFAULT_TIME_DELAY = 3000;
 
@@ -97,6 +126,11 @@ function send(text) {
 	// Check to see if that message is visible
 	checkVisibility($sentMessage);
 
+	// update the last message sent variable to be stored in the database and store in database
+	lastSentMessage = text;
+	storeMessageToDB();
+
+
 	// AJAX post request, sends the users text to API.AI and 
 	// calls the method newReceivedMessage with the response from API.AI
 	$.ajax({
@@ -122,8 +156,6 @@ function send(text) {
 }
 
 
-
-
 //----------------------User Receives Message Methods--------------------------------//
 
 
@@ -135,6 +167,9 @@ function newRecievedMessage(messageText) {
 
 	// Variable storing the message with the "" removed
 	var removedQuotes = messageText.replace(/[""]/g,"");
+
+	// update the last message recieved variable for storage in the database
+	lastRecievedMessage = removedQuotes;
 
 	// If the message contains a <ar then it is a message
 	// whose responses are buttons
@@ -316,7 +351,7 @@ function createNewMessage(message) {
 	hideLoading();
 
 	// take the message and say it back to the user.
-	speechResponse(message);
+	//speechResponse(message);
 
 	// Show the send button and the text area
 	$('#rec').css('visibility', 'visible');
@@ -333,6 +368,29 @@ function createNewMessage(message) {
 
 	// Call the method to see if the message is visible
 	checkVisibility($newMessage);
+}
+
+
+
+
+//------------------------------------------- Database Write --------------------------------------------------//
+
+function storeMessageToDB() {
+  
+	if (lastRecievedMessage == 1) {
+ 		var storeMessage = firebase.database().ref(botName).child(newKey).push({
+    		UserResponse: lastSentMessage,
+		});
+  	}
+	
+	else {
+
+		var storeMessage = firebase.database().ref(botName).child(newKey).push({
+    		Question: lastRecievedMessage,
+    		UserResponse: lastSentMessage,
+  		});
+	}
+
 }
 
 
