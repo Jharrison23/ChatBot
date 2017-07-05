@@ -13,6 +13,7 @@ var baseUrl = credentialsBaseUrl;
 
 // Initialize Firebase
 var config = credentialsConfig;
+
 // The format for config is as follows
 // Set the configuration for your app
 // TODO: Replace with your project's config object
@@ -35,6 +36,7 @@ console.log("Key for this chat instance = " + newKey);
 //  Variables to be used for storing the last message sent and recieved for the database
 var lastSentMessage = "";
 var lastRecievedMessage = 1;
+var ButtonClicked = false;
 
 
 var DEFAULT_TIME_DELAY = 3000;
@@ -72,11 +74,18 @@ $('document').ready(function(){
 			// Ignore the default function of the enter key(Dont go to a new line)
 			event.preventDefault();
 
+			ButtonClicked = false;
+
 			// Call the method for sending a message, pass in the text from the user
 			send(this.value);
 
 			// Clear the text area
 			this.value = "";
+
+			if($("#switchInputType").is(":visible")) {
+				$("#switchInputType").toggle();
+				$('.buttonResponse').remove();
+			}
 		}
 	});
 
@@ -93,9 +102,11 @@ $('document').ready(function(){
 	// If the user selects one of the dynamic button responses
 	$('.chat-form').on("click", '.buttonResponse', function() {
 
+		ButtonClicked = true;
+
 		// Send the text on the button as a user message
 		send(this.innerText);
-
+		
 		// Show the record button and text input area
 		$('#rec').toggle();
 		$('textarea').toggle();
@@ -388,6 +399,7 @@ function storeMessageToDB() {
 		var storeMessage = firebase.database().ref(botName).child(newKey).push({
     		Question: lastRecievedMessage,
     		UserResponse: lastSentMessage,
+			ButtonClicked: ButtonClicked
   		});
 	}
 
