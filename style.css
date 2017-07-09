@@ -133,10 +133,16 @@ body {
     overflow: auto;
 }
 
+#inputDiv {
+    width: 75%;
+    margin-right: 15px;
+    
+}
+
 .chat-form textarea {
     padding: 5px;
     background: #fbfbfb;
-    width: 75%;
+    width: 100%;
     height: 65px;
     border: 2px solid lightblue;
     border-radius: 3px;
@@ -150,7 +156,11 @@ body {
     background: #fff;
 }
 
-.chat-form button {
+#chat-form-buttons {
+    padding: auto;
+}
+
+/*.chat-form button {
     height: 65px;
     background: rgba(255, 153, 0, .7);;
     padding: 5px 15px;
@@ -161,7 +171,7 @@ body {
     border-radius: 3px;
     box-shadow: 0 3px 0 rgba(255, 153, 0, .7);;
     cursor: pointer;
-}
+}*/
 
 .chat-form button:hover{
     background: rgb(255, 153, 0);
@@ -176,7 +186,7 @@ body {
 .buttonResponse {
     color: white;
     max-width: 80%;
-    width: auto;
+    width: fit-content;
     margin: 5px 0 5px auto;
     /*background: rgba(255, 153, 0, .7);*/
     border-radius: 20px 20px 0px 20px;
@@ -185,6 +195,7 @@ body {
     font-size: 18px;
     padding: 10px;
     margin: 10px 20px;
+    float: left;
     /*order: -1;*/
 }
 
@@ -203,4 +214,9 @@ body {
     width: 40px;
     height: 40px;
    
+}
+
+#rec {
+    width: 40px;
+    height: 40px;
 }
