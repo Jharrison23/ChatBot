@@ -54,7 +54,14 @@ $('document').ready(function(){
 	$("#switchInputType").click(function(event) {
 
 		// Toggle which input type is shown
-		$('#rec').toggle();
+		//$('#rec').toggle();
+		if($('.buttonResponse').is(":visible")) {
+			$("#switchInputType").attr("src", "multipleChoice.png");
+		}
+
+		else {
+			$("#switchInputType").attr("src", "keyboard.png");
+		}
 		$('textarea').toggle();
 		$('.buttonResponse').toggle();
 
@@ -108,7 +115,7 @@ $('document').ready(function(){
 		send(this.innerText);
 		
 		// Show the record button and text input area
-		$('#rec').toggle();
+		//$('#rec').toggle();
 		$('textarea').toggle();
 
 		// Hide the button responses and the switch input button
@@ -335,7 +342,7 @@ function buttonResponse(message)
 		createNewMessage(matches[2]);
 		
 		// Hide the send button and the text area
-		$('#rec').toggle();
+		// $('#rec').toggle();
 		$('textarea').toggle();
 
 		// Show the switch input button
@@ -345,8 +352,10 @@ function buttonResponse(message)
 		for (var index = 0; index < listOfInputs.length; index++) {
 						
 			// Append to the chat-form div which is at the bottom of the chatbox
-			listOfInputs[index].appendTo($('.chat-form'));
-		}	
+			listOfInputs[index].appendTo($('#inputDiv'));
+		}
+
+			
 		
 	}, matches[1]);
 
@@ -364,9 +373,9 @@ function createNewMessage(message) {
 	// take the message and say it back to the user.
 	//speechResponse(message);
 
-	// Show the send button and the text area
-	$('#rec').css('visibility', 'visible');
-	$('textarea').css('visibility', 'visible');
+	// // Show the send button and the text area
+	// $('#rec').css('visibility', 'visible');
+	// $('textarea').css('visibility', 'visible');
 
 	// Append a new div to the chatlogs body, with an image and the text from API.AI
 	$chatlogs.append(
@@ -388,9 +397,12 @@ function createNewMessage(message) {
 
 function storeMessageToDB() {
   
+	var date = new Date();
+	console.log(date);
 	if (lastRecievedMessage == 1) {
  		var storeMessage = firebase.database().ref(botName).child(newKey).push({
     		UserResponse: lastSentMessage,
+			Time: date + ""
 		});
   	}
 	
@@ -399,7 +411,8 @@ function storeMessageToDB() {
 		var storeMessage = firebase.database().ref(botName).child(newKey).push({
     		Question: lastRecievedMessage,
     		UserResponse: lastSentMessage,
-			ButtonClicked: ButtonClicked
+			ButtonClicked: ButtonClicked,
+			Time: date + ""
   		});
 	}
 
@@ -415,8 +428,10 @@ function showLoading()
 	$chatlogs.append($('#loadingGif'));
 	$("#loadingGif").show();
 
-	$('#rec').css('visibility', 'hidden');
-	$('textarea').css('visibility', 'hidden');
+	// $('#rec').css('visibility', 'hidden');
+	// $('textarea').css('visibility', 'hidden');
+
+	$('.chat-form').css('visibility', 'hidden');
  }
 
 
@@ -424,6 +439,7 @@ function showLoading()
 // Function which hides the typing indicator
 function hideLoading()
 {
+	$('.chat-form').css('visibility', 'visible');
 	$("#loadingGif").hide();
 }
 
@@ -511,7 +527,14 @@ function setInput(text) {
 
 
 function updateRec() {
-	$("#rec").text(recognition ? "Stop" : "Speak");
+	
+
+	if (recognition) {
+		$("#rec").attr("src", "MicrophoneOff.png");
+	} else {
+		$("#rec").attr("src", "microphone.png");
+
+	}
 }
 
 function speechResponse(message)
