@@ -10,3 +10,10 @@ Front End Chat Interface which allows users to connect with an API.AI bot of cho
 * Allows the user to use speech input, and the bot will speak back to the user using HTML 5 Speech Synthesis. 
 * There is a delay which simulates the bot typing and using regular expressions there can be a dynamic time delay for each message back.
 * The bot can also have multiple choice responses which are seperated using regular expressions as well.
+
+
+## Built With
+
+* [API.AI](https://api.ai) - Used to build conversation experiences
+* [Firebase](https://firebase.google.com) - Realtime Database and User Authentication
+* [jQuery](https://jquery.com) -  A Javascript Library used for easy DOM manipulation
