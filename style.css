@@ -157,7 +157,7 @@ body {
 }
 
 #chat-form-buttons {
-    padding: auto;
+    margin: auto;
 }
 
 /*.chat-form button {
