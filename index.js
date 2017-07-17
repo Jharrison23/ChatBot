@@ -54,7 +54,6 @@ $('document').ready(function(){
 	$("#switchInputType").click(function(event) {
 
 		// Toggle which input type is shown
-		//$('#rec').toggle();
 		if($('.buttonResponse').is(":visible")) {
 			$("#switchInputType").attr("src", "Images/multipleChoice.png");
 		}
@@ -85,6 +84,9 @@ $('document').ready(function(){
 
 			// Call the method for sending a message, pass in the text from the user
 			send(this.value);
+			
+			// reset the size of the text area
+			$(".input").attr("rows", "1");
 
 			// Clear the text area
 			this.value = "";
@@ -93,6 +95,7 @@ $('document').ready(function(){
 				$("#switchInputType").toggle();
 				$('.buttonResponse').remove();
 			}
+
 		}
 	});
 
@@ -124,6 +127,7 @@ $('document').ready(function(){
 
 		// Remove the button responses from the div
 		$('.buttonResponse').remove();
+		
 	});
 
 })
@@ -441,6 +445,13 @@ function hideLoading()
 {
 	$('.chat-form').css('visibility', 'visible');
 	$("#loadingGif").hide();
+
+	// Clear the text area of text
+	$(".input").val("");
+
+	// reset the size of the text area
+	$(".input").attr("rows", "1");
+	
 }
 
 
@@ -562,7 +573,7 @@ function speechResponse(message)
 
 
 
-
+//----------------------------------------- Resize the textarea ------------------------------------------//
 $(document)
     .one('focus.input', 'textarea.input', function(){
         var savedValue = this.value;

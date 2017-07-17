@@ -144,9 +144,9 @@ body {
     color: #000;
     margin: 15px 0px 15px 10px;
     display:block;
-    box-sizing: padding-box;
     overflow:hidden;
-
+    box-shadow: none;
+    outline: none;
 
 }
 
