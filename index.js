@@ -246,9 +246,12 @@ function multiMessage(message)
 			matches[1] = DEFAULT_TIME_DELAY;
 		}
 
+		// Create an array of the responses which will be buttons
+		var messageText  = matches[2].split(/<ar>/);
+
 		// Create a message object and add it to the list of messages
 		listOfMessages.push({
-				text: matches[2],
+				text: messageText[0],
 				delay: matches[1]
 		});
 	}
@@ -306,17 +309,24 @@ function buttonResponse(message)
 	// Used to store the new HTML div which will be the button	
 	var $input;
 
+	// send the message to the multi message method to split it up, message will be sent here
+	multiMessage(message);
+	
 	// Regex used to find time delay, text of the message and responses to be buttons
 	var regex = /\<br(?:\s+?(\d+))?\>(.*?)(?=(?:\<ar(?:\s+\d+)?\>)|$)/g;
 
 	// Seach the message and capture the groups which match the regex
 	matches = regex.exec(message);
 
+	console.log(matches);
+
 	// Create an array of the responses which will be buttons
 	var buttonList = message.split(/<ar>/);
 
 	// Remove the first element, The first split is the actual message
 	buttonList = buttonList.splice(1);
+
+	console.log(buttonList);
 
 	// Array which will store all of the newly created buttons
 	var listOfInputs = [];
@@ -342,8 +352,6 @@ function buttonResponse(message)
 	// After the time delay call the createNewMessage function
 	setTimeout(function() {
 			
-		// Create and display a new message with the text from the server
-		createNewMessage(matches[2]);
 		
 		// Hide the send button and the text area
 		// $('#rec').toggle();
