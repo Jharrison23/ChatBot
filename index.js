@@ -364,7 +364,7 @@ function buttonResponse(message)
 		for (var index = 0; index < listOfInputs.length; index++) {
 						
 			// Append to the chat-form div which is at the bottom of the chatbox
-			listOfInputs[index].appendTo($('#inputDiv'));
+			listOfInputs[index].appendTo($('#buttonDiv'));
 		}
 
 			

@@ -1,8 +1,11 @@
-* { 
+* {
+
     margin: 0;
     padding: 0;
-    font-family: tahoma, sans-serif;
+    font-family: sans-serif;
     box-sizing: border-box;
+    font-weight: 100;
+
 }
 
 body {
@@ -213,3 +216,11 @@ body {
     max-width: 40px;
     max-height: 40px;
 }
+
+#buttonDiv {
+    margin: 0 auto;
+    width: inherit;
+
+}
+
+
