@@ -14,17 +14,17 @@ Front End Chat Interface which allows users to connect with an API.AI bot of cho
 
 ## Screenshots
 
-#### Initial Screen
+### Initial Screen
 
 <a href="https://github.com/Jharrison23/ChatBot/blob/master/Images/Startup%20Screenshot.png
 "><img src="https://github.com/Jharrison23/ChatBot/blob/master/Images/Startup%20Screenshot.png" title="Initial Screen"/></a>
 
-#### Showing Multiple Choice Buttons
+### Showing Multiple Choice Buttons
 
 <a href="https://github.com/Jharrison23/ChatBot/blob/master/Images/Show%20Buttons.png
 "><img src="https://github.com/Jharrison23/ChatBot/blob/master/Images/Show%20Buttons.png" title="Buttons Screen"/></a>
 
-#### Show the view when switched back to text input
+### Show the view when switched back to text input
 
 <a href="https://github.com/Jharrison23/ChatBot/blob/master/Images/Show%20Text%20Input.png
 "><img src="https://github.com/Jharrison23/ChatBot/blob/master/Images/Show%20Text%20Input.png" title="Text Input Screen"/></a>
